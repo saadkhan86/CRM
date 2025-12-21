@@ -22,6 +22,7 @@ const CustomerSchema = new Schema<CustomerInterface.Doc>(
     password: {
       type: String,
       required: true,
+      select:false
     },
     contact: {
       type: String,

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import router from "./Routes/router";
 import connetion from "./Connetions/MongoDB";
 connetion();
@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(router);
 
-app.use((error: any, req: any, res: any, next: any) => {
+app.use((error: any, req: Request, res: Response,next:Function) => {
   res.status(error.status || 500).json({
     status: error.status || 500,
     message: error.message || "something went wrong",
