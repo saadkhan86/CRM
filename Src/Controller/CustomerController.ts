@@ -1,4 +1,4 @@
-import express, {Request, Response } from "express";
+import express, { Request, Response } from "express";
 import CustomerRepo from "../Repositories/CustomerRepo";
 import CustomerInterface from "../Interfaces/CustomerInterface";
 
@@ -8,7 +8,7 @@ const CustomerController = {
       const newCustomer = await CustomerRepo.create(req.body);
       res.status(200).json({ success: true, data: newCustomer });
     } catch (error) {
-      return next(error,req,res);
+      return next(error, req, res);
     }
   },
   update: async (req: Request, res: Response, next: Function) => {
@@ -16,7 +16,7 @@ const CustomerController = {
       const updateCustomer = await CustomerRepo.update(req.params.id, req.body);
       res.status(200).json({ success: true, data: updateCustomer });
     } catch (error) {
-      return next(error,req,res);
+      return next(error, req, res);
     }
   },
   delete: async (req: Request, res: Response, next: Function) => {
@@ -24,7 +24,7 @@ const CustomerController = {
       const deleteCustomer = await CustomerRepo.delete(req.params.id);
       res.status(200).json({ success: true, data: deleteCustomer });
     } catch (error) {
-      return next(error,req, res);
+      return next(error, req, res);
     }
   },
   query: async (req: Request, res: Response, next: Function) => {
@@ -45,7 +45,7 @@ const CustomerController = {
       const foundCustomers = await CustomerRepo.query(query);
       res.status(200).json({ success: true, data: foundCustomers });
     } catch (error) {
-      return next(error,req, res);
+      return next(error, req, res);
     }
   },
   querySpecific: async (req: Request, res: Response, next: Function) => {
@@ -55,7 +55,7 @@ const CustomerController = {
       );
       res.status(200).json({ success: true, data: findSpecificCustomer });
     } catch (error) {
-      return next(error,req, res);
+      return next(error, req, res);
     }
   },
 };

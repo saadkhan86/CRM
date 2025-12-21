@@ -7,10 +7,12 @@ export declare namespace CustomerInterface {
     organization: string;
     password: string;
     contact: string;
-    position:string;
+    position: string;
+    orderStatus: "received" | "delivered" | "pending";
   }
   interface create {
-    position:string;
+    orderStatus: "received" | "delivered" | "pending";
+    position: string;
     contact: string;
     name: string;
     email: string;
@@ -18,18 +20,20 @@ export declare namespace CustomerInterface {
     password: string;
   }
   interface update {
-    position:string;
+    orderStatus: "received" | "delivered" | "pending";
+    position: string;
     contact: string;
     name: string;
     email: string;
     organization: string;
     password: string;
   }
-  interface query{
-    page?:number;
-    order?:string | any;
-    search?:string;
-    limit?:number;
+  interface query {
+    orderStatus?: 'received'|'delivered'|'pending';
+    page?: number;
+    order?: number | any;
+    search?: string;
+    limit?: number;
   }
 }
 

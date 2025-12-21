@@ -1,5 +1,5 @@
 import express,{Request,Response} from "express";
-import CustomersRouter from "../Routes/CustomersRouter"
+import CustomersRouter from "./AdminCustomer"
 const router=express.Router();
-router.use("/api/customers",CustomersRouter);
+router.use("/api",CustomersRouter);
 export default router

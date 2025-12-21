@@ -87,7 +87,7 @@ class CustomerRepo {
   }
 
   public async querySpecific(id: Types.ObjectId | string) {
-    const db = await Customer.findById(id);
+    const db = await Customer.findById(id).lean().select("-password");
     if (!db) {
       throw new ErrorHandler(400, "user doest not exists");
     }

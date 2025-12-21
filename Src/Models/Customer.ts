@@ -11,9 +11,16 @@ const CustomerSchema = new Schema<CustomerInterface.Doc>(
       type: String,
       required: true,
     },
+    orderStatus:{
+      type:String,
+      required:true,
+      enum:["received","pending","delivered"]
+    }
+    ,
     email: {
       type: String,
       required: true,
+      unique:true
     },
     organization: {
       type: String,
