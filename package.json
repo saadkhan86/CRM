@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "mongodb": "^7.0.0",
+    "mongoose": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.3",
+    "dotenv": "^17.2.3",
+    "nodemon": "^3.1.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "name": "crm",
+  "version": "1.0.0",
+  "description": "CRM,Pipeline,CRUD",
+  "main": "index.ts",
+  "scripts": {
+    "test": "node ./Src/index.ts"
+  },
+  "author": "Saad Muhammad Bin Ramzan",
+  "license": "ISC"
+}
