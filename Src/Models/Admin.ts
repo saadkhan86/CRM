@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import AdminInterface from "../Interfaces/AdminInterface";
+import Customer from "./Customer";
 const Schema = mongoose.Schema;
 const AdminSchema = new Schema<AdminInterface.Doc>(
   {

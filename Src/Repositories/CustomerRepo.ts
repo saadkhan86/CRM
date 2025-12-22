@@ -9,7 +9,6 @@ class CustomerRepo {
     if (user) {
       throw new ErrorHandler(409, "user alredy exists");
     }
-    data.password = await bcrypt.hash(data.password, 5);
     const db = new Customer(data);
     return await db.save();
   }
@@ -26,10 +25,8 @@ class CustomerRepo {
     const availableFields = [
       "name",
       "email",
-      "password",
       "contact",
       "organization",
-      "position",
     ] as const;
     availableFields.forEach((field) => {
       if (data[field] !== undefined && data[field] !== null) {
@@ -67,7 +64,6 @@ class CustomerRepo {
         $or: [
           { name: { $regex: search, $options: "i" } },
           { email: { $regex: search, $options: "i" } },
-          { position: { $regex: search, $options: "i" } },
           { organization: { $regex: search, $options: "i" } },
         ],
       };
@@ -76,7 +72,6 @@ class CustomerRepo {
     }
     const db = await Customer.find(searchQuery)
       .sort({ name: query.order ? query.order : 1 })
-      .select("-password")
       .skip((page - 1) * limit)
       .limit(limit)
       .lean();
@@ -87,7 +82,7 @@ class CustomerRepo {
   }
 
   public async querySpecific(id: Types.ObjectId | string) {
-    const db = await Customer.findById(id).lean().select("-password");
+    const db = await Customer.findById(id).lean();
     if (!db) {
       throw new ErrorHandler(400, "user doest not exists");
     }

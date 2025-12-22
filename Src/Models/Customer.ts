@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import CustomerInterface from "../Interfaces/CustomerInterface";
+import Admin from "./Admin";
 const Schema = mongoose.Schema;
 const CustomerSchema = new Schema<CustomerInterface.Doc>(
   {
@@ -7,16 +8,6 @@ const CustomerSchema = new Schema<CustomerInterface.Doc>(
       type: String,
       required: true,
     },
-    position: {
-      type: String,
-      required: true,
-    },
-    orderStatus:{
-      type:String,
-      required:true,
-      enum:["received","pending","delivered"]
-    }
-    ,
     email: {
       type: String,
       required: true,
@@ -25,11 +16,6 @@ const CustomerSchema = new Schema<CustomerInterface.Doc>(
     organization: {
       type: String,
       required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      select:false
     },
     contact: {
       type: String,

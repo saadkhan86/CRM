@@ -19,5 +19,8 @@ router.delete(
   AdminAuth.auth,
   CustomerController.delete
 );
-
+router.post("/admin/customers/:id/deals");
+router.patch("/admin/customers/:id/deals");
+router.delete("/admin/customers/:id/deals");
+router.get("/admin/customers/:id/deals");
 export default router;
