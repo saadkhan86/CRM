@@ -35,7 +35,7 @@ class AdminRepo {
 
     const db = await Admin.findOne({ email }).select("+password");
     if (!db) {
-      throw new ErrorHandler(404, "user not found with this email");
+      throw new ErrorHandler(404, "Admin not found with this email");
     }
     const matchPass = bcrypt.compareSync(password, db.password);
     if (!matchPass) {
@@ -56,7 +56,7 @@ class AdminRepo {
   ) {
     let db = await Admin.findById(id);
     if (!db) {
-      throw new ErrorHandler(400, "User not provided");
+      throw new ErrorHandler(400, "Admin not found");
     }
     db = await Admin.findByIdAndUpdate(
       id,

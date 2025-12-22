@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import ErrorHandler from "../ErrorHandler/ErrorHandler";
 import AdminRepo from "../Repositories/AdminRepo";
-
 const AdminController = {
   create: async (req: Request, res: Response, next: Function) => {
     try {
