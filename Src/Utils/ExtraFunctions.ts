@@ -1,4 +1,4 @@
-const TimeZone = {
+const ExtraFunctions = {
 	toLocalTime: (date: Date | string) => {
 		const d = new Date(date)
 		const year = d.getFullYear()
@@ -12,4 +12,9 @@ const TimeZone = {
 	fromLocalTime: (localTimeStr: string) => {
 		return new Date(localTimeStr.replace(' ', 'T') + ':00')
 	},
+	normalizeStage: (input: string) => {
+		return input.toLowerCase().replace(/\s+/g, '')
+	},
+
 }
+export default ExtraFunctions

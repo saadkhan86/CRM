@@ -1,42 +1,30 @@
+import Customer from './Customer'
 import mongoose from 'mongoose'
 import DealsInterface from '../Interfaces/DealsInterface'
 const Schema = mongoose.Schema
 const DealsSchema = new Schema<DealsInterface.Doc>(
 	{
-		title: { type: String, required: true },
-		contact: {
-			type: String,
-			required: true,
-		},
-		phoneNo:{
-			type:String,
-			required:true
-		},
-		email:{
-			type:String,
-			required:true
-		}
-		,
-		organization: {
-			type: String,
-			required: true,
+		createdWith:{
+			type:mongoose.Types.ObjectId,
+			ref:"Customer",
+			required:true,	
 		},
 		amount: { type: Number, required: true },
-		currency:{type:String,required:true,default:"PKR"},
 		stage: {
 			type: String,
 			enum: [
 				'qualified',
-				'contact made',
-				'Demo Scheduled',
-				'Proposal Sent',
-				'negotiation Started',
+				'contactmade',
+				'organization',
+				'demoscheduled',
+				'proposalsent',
+				'negotiationstarted',
 				'won',
 				'lost',
 			],
 			default: 'qualified',
 		},
-		startDate: { type: Date, required: true, default: Date.now },
+		startDate: { type: Date, required: true, default: new Date() },
 		expectedCloseDate: { type: Date, required: true },
 		sourceChannel: {
 			type: String,

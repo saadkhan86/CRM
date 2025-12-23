@@ -7,7 +7,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(router)
 app.get('/', (req: Request, res: Response) => {
-	res.status(200).send('Server is up and running')
+	res.status(200).send('server is running')
 })
 app.use((error: any, req: Request, res: Response, next: Function) => {
 	res.status(error.status || 500).json({

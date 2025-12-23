@@ -2,13 +2,7 @@ import { Document, Types } from 'mongoose'
 
 export declare namespace DealsInterface {
 	interface Doc extends Document {
-		title: string
-		createdBy: Types.ObjectId
-		phoneNo:string
-		email:string
-		contact: string
-		currency: string
-		organization: string
+		createdWith: String | Types.ObjectId
 		amount: number
 		sourceChannel: string
 		sourceChannelId: string
@@ -16,42 +10,30 @@ export declare namespace DealsInterface {
 		startDate?: Date
 		stage:
 			| 'qualified'
-			| 'contact made'
-			| 'Demo Scheduled'
-			| 'Proposal Sent'
-			| 'negotiation Started'
+			| 'contactmade'
+			| 'demoscheduled'
+			| 'proposalsent'
+			| 'negotiationstarted'
 			| 'won'
 			| 'lost'
 	}
 	interface create {
-		title: string
-		contact: string
-		phoneNo:string,
-		email:string
-		organization: string
+		createdWith: Types.ObjectId | string
 		amount: number
-		currency?: string
 		sourceChannel: string
 		sourceChannelId: string
 		expectedCloseDate: Date
 		startDate?: Date
 		stage:
 			| 'qualified'
-			| 'contact made'
-			| 'Demo Scheduled'
-			| 'Proposal Sent'
-			| 'negotiation Started'
+			| 'contactmade'
+			| 'demoscheduled'
+			| 'proposalsent'
+			| 'negotiationstarted'
 			| 'won'
 			| 'lost'
 	}
 	interface update {
-		dealId?: Types.ObjectId | string
-		phoneNo?:string
-		email?:string
-		title?: string
-		contact?: string
-		organization?: string
-		currency?: string
 		amount?: number
 		sourceChannel?: string
 		sourceChannelId?: string
@@ -59,25 +41,23 @@ export declare namespace DealsInterface {
 		startDate?: Date
 		stage?:
 			| 'qualified'
-			| 'contact made'
-			| 'Demo Scheduled'
-			| 'Proposal Sent'
-			| 'negotiation Started'
+			| 'contactmade'
+			| 'demoscheduled'
+			| 'proposalsent'
+			| 'negotiationstarted'
 			| 'won'
 			| 'lost'
 	}
 	interface remove {
-		id: Types.ObjectId
+		dealId: Types.ObjectId | string
 	}
 	interface query {
-		email?:string
-		phoneNo?:string
+		id?: Types.ObjectId
 		currency?: string
 		page?: number
 		limit?: number
 		order?: number
 		search?: string
-		id?: Types.ObjectId | string
 	}
 }
 export default DealsInterface

@@ -1,3 +1,4 @@
+import { Types } from 'mongoose'
 import ErrorHandler from '../ErrorHandler/ErrorHandler'
 import DealsInterface from '../Interfaces/DealsInterface'
 import Deals from '../Models/Deals'
@@ -5,62 +6,39 @@ import Deals from '../Models/Deals'
 class DealsRepo {
 	public async create(data: DealsInterface.create) {
 		if (
-			!data.title ||
+			!data.createdWith||
 			!data.stage ||
-			!data.contact ||
-			!data.organization ||
 			!data.amount ||
 			!data.sourceChannel ||
 			!data.sourceChannelId ||
-			!data.expectedCloseDate ||
-			!data.email ||
-			!data.phoneNo
+			!data.expectedCloseDate
 		) {
 			throw new ErrorHandler(400, 'please provide all required fields')
 		}
 		const db = new Deals(data)
-		return await db.save()
+		return await (await db.save()).populate("createdWith");
 	}
-	public async update(data: DealsInterface.update) {
-		if (!data.dealId) {
+	public async get(id: string) {
+		if (!id) {
+			throw new ErrorHandler(400, 'Enter user id to get deal')
+		}
+		const deal = await Deals.findById(id).populate("createdWith")
+		if (!deal || deal===undefined || deal===null) {
+			throw new ErrorHandler(404, 'Deal not found')
+		}
+		return deal
+	}
+	public async update(id:Types.ObjectId | string,data: DealsInterface.update) {
+		if (!id) {
 			throw new ErrorHandler(400, 'Deal ID is required to update deal')
 		}
-		const oldDeal = await Deals.findById(data.dealId)
-		if (!oldDeal) {
-			throw new ErrorHandler(404, 'Deal not found with the given Id')
-		}
-		const availableFields = [
-			'currency',
-			'phoneNo',
-			'email',
-			'title',
-			'contact',
-			'organization',
-			'amount',
-			'stage',
-			'startDate',
-			'expectedCloseDate',
-			'sourceChannel',
-			'sourceChannelId',
-		] as const
-		const updateObject: any = {}
-		availableFields.forEach((field) => {
-			if (data[field] !== undefined && data[field] !== null) {
-				if (data[field] !== oldDeal[field]) {
-					updateObject[field] = data[field]
-				}
-			}
-		})
-		if (Object.keys(updateObject).length === 0) {
-			return oldDeal
-		}
 		const updatedDeal = await Deals.findByIdAndUpdate(
-			oldDeal._id,
-			updateObject,
+			id,
+			data,
 			{
 				new: true,
 			}
-		).lean()
+		).populate("createdWith").lean()
 		return updatedDeal
 	}
 	public async delete(id: string) {
@@ -72,7 +50,7 @@ class DealsRepo {
 	}
 	public async query(queryObject: DealsInterface.query) {
 		if (queryObject.id) {
-			let deal = await Deals.findById(queryObject.id)
+			let deal = await Deals.findById({createdWith:queryObject.id}).populate("createdWith");
 			if (!deal) {
 				throw new ErrorHandler(404, 'Deal not found with the given ID')
 			}
@@ -101,7 +79,7 @@ class DealsRepo {
 		} else {
 			searchQuery = {}
 		}
-		const db = await Deals.find(searchQuery)
+		const db = await Deals.find(searchQuery).populate("createdWith")
 			.sort({ startDate: order })
 			.skip((page - 1) * limit)
 			.limit(limit)
