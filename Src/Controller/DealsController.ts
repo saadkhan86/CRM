@@ -12,7 +12,7 @@ const DealsController = {
 			var id: Types.ObjectId
 
 			const { name, email, organization, contact } = req.body
-			const newCustomer = await CustomerRepo.createForDeals({
+			const newCustomer = await CustomerRepo.create({
 				...(req.params.id && { id: req.params.id }),
 				...req.body,
 			})

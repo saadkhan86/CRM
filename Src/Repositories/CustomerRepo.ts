@@ -4,25 +4,16 @@ import CustomerInterface from '../Interfaces/CustomerInterface'
 import Customer from '../Models/Customer'
 class CustomerRepo {
 	public async create(data: CustomerInterface.create) {
-		const user = await Customer.findOne({ email: data.email })
+		const customerInfo = data.id
+			? { _id: new Types.ObjectId(data.id) }
+			: { email: data.email }
+		const user = await Customer.findOne(customerInfo)
 		if (user) {
 			throw new ErrorHandler(409, 'user alredy exists')
 		}
 		const db = new Customer(data)
 		return await db.save()
 	}
-	public async createForDeals(data: CustomerInterface.create) {
-		const customerInfo = data.id
-			? { _id: new Types.ObjectId(data.id) }
-			: { email: data.email }
-		const user = await Customer.findOne(customerInfo)
-		if (user) {
-			return user
-		}
-		const db = new Customer(data)
-		return await db.save()
-	}
-
 	public async update(
 		id: Types.ObjectId | string,
 		data: CustomerInterface.update
