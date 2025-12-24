@@ -28,16 +28,11 @@ class AdminRepo {
 	}
 	public async login(data: AdminInterface.login) {
 		let user: any = {}
-		let { email, password } = data
-		if (!email || !password) {
-			throw new ErrorHandler(400, 'please fill required fields')
-		}
-
-		const db = await Admin.findOne({ email }).select('+password')
+		const db = await Admin.findOne({ email:data.email }).select('+password')
 		if (!db) {
 			throw new ErrorHandler(404, 'Admin not found with this email')
 		}
-		const matchPass = bcrypt.compareSync(password, db.password)
+		const matchPass = bcrypt.compareSync(data.password, db.password)
 		if (!matchPass) {
 			throw new ErrorHandler(401, 'Either wrong email or password')
 		}

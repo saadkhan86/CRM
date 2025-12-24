@@ -1,6 +1,5 @@
 import {Types } from "mongoose";
-
-const jwt=require("jsonwebtoken");
+import jwt from "jsonwebtoken"
 const signToken=(userId: string | Types.ObjectId) => {
     return jwt.sign(
     { id: userId },

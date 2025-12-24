@@ -26,8 +26,8 @@ class CustomerRepo {
 	}
 
 	public async query(query: Types.ObjectId | string) {
-		const customers = await Customer.findById(query)
-		return customers
+		const customer = await Customer.findById(query)
+		return customer
 	}
 }
 export default new CustomerRepo()

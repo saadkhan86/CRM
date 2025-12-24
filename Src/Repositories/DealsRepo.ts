@@ -8,7 +8,7 @@ class DealsRepo {
 		if (
 			!data.createdWith ||
 			!data.stage ||
-			!data.amount.price||
+			!data.amount.price ||
 			!data.sourceChannel ||
 			!data.sourceChannelId ||
 			!data.expectedCloseDate
@@ -33,28 +33,36 @@ class DealsRepo {
 		id: Types.ObjectId | string,
 		data: DealsInterface.update
 	) {
-		if (!id) {
-			throw new ErrorHandler(400, 'Deal ID is required to update deal')
+		const existingDeal = await Deals.findById(id)
+		if (!existingDeal) {
+			throw new ErrorHandler(404, 'Deal not found with the given id')
+		}
+		if (data.amount) {
+			data.amount = {
+				price: data.amount.price ?? existingDeal.amount.price,
+				currency: data.amount.currency ?? existingDeal.amount.currency,
+			}
 		}
 		const updatedDeal = await Deals.findByIdAndUpdate(id, data, {
 			new: true,
 		})
 			.populate('createdWith')
 			.lean()
+
 		return updatedDeal
 	}
 	public async delete(id: string) {
-		const db = await Deals.findByIdAndDelete(id)
-		if (!db) {
+		const deal = await Deals.findByIdAndDelete(id)
+		if (!deal) {
 			throw new ErrorHandler(404, 'Deal not found')
 		}
-		return db
+		return deal
 	}
 	public async query(id: Types.ObjectId | string) {
-		const deals = await Deals.find({
+		const deal = await Deals.find({
 			$or: [{ _id: id }, { createdWith: id }],
 		}).populate('createdWith')
-		return deals
+		return deal
 	}
 }
 export default new DealsRepo()

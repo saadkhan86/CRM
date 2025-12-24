@@ -19,9 +19,6 @@ export declare namespace CustomerInterface {
 		email?: string
 		organization?: string
 	}
-	interface query {
-		id?: Types.ObjectId | string
-	}
 }
 
 export default CustomerInterface

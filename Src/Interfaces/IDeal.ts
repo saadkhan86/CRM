@@ -30,14 +30,8 @@ export declare namespace DealsInterface {
 		sourceChannelId: string
 		expectedCloseDate: Date
 		startDate?: Date
-		stage:
-			| 'qualified'
-			| 'contactMade'
-			| 'demoScheduled'
-			| 'proposalSent'
-			| 'negotiationStarted'
-			| 'won'
-			| 'lost'
+		stage:Doc['stage']
+			
 	}
 	interface update {
 		amount?: {
@@ -48,22 +42,7 @@ export declare namespace DealsInterface {
 		sourceChannelId?: string
 		expectedCloseDate?: Date
 		startDate?: Date
-		stage?:
-			| 'qualified'
-			| 'contactMade'
-			| 'demoScheduled'
-			| 'proposalSent'
-			| 'negotiationStarted'
-			| 'won'
-			| 'lost'
-	}
-	interface query {
-		id?: Types.ObjectId
-		currency?: string
-		page?: number
-		limit?: number
-		order?: number
-		search?: string
+		stage?:Doc['stage']
 	}
 }
 export default DealsInterface
