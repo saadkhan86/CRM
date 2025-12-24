@@ -28,7 +28,7 @@ class AdminRepo {
 	}
 	public async login(data: AdminInterface.login) {
 		let user: any = {}
-		const db = await Admin.findOne({ email:data.email }).select('+password')
+		const db = await Admin.findOne({ email: data.email }).select('+password')
 		if (!db) {
 			throw new ErrorHandler(404, 'Admin not found with this email')
 		}
@@ -49,23 +49,19 @@ class AdminRepo {
 		id: Types.ObjectId | string,
 		data: AdminInterface.update
 	) {
-		let db = await Admin.findById(id)
-		if (!db) {
+		var admin = await Admin.findById(id)
+		if (!admin) {
 			throw new ErrorHandler(400, 'Admin not found')
 		}
-		db = await Admin.findByIdAndUpdate(
-			id,
-			{ email: data.email, name: data.name, password: data.password },
-			{ new: true }
-		)
-		if (!db) {
-			throw new ErrorHandler(500, 'something went wrong')
+		admin = await Admin.findByIdAndUpdate(id, data, { new: true })
+		if (!admin) {
+			throw new ErrorHandler(500, 'something went wrong while updating Admin')
 		}
 		const user = {
-			token: await signToken(db._id),
-			_id: db._id,
-			name: db.name,
-			email: db.email,
+			token: signToken(admin._id),
+			_id: admin._id,
+			name: admin.name,
+			email: admin.email,
 		}
 		return user
 	}

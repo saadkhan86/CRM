@@ -41,7 +41,7 @@ const CustomerController = {
 	},
 	query: async (req: Request, res: Response, next: Function) => {
 		try {
-			const id = req.params.id as string
+			const id = req.query.id as string
 			const customers = await CustomerRepo.query(id)
 			res.status(200).json({ success: true, data: customers })
 		} catch (error) {

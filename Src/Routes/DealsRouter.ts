@@ -1,9 +1,9 @@
 import DealsController from '../Controller/DealsController'
 import AdminAuth from '../Middlewares/Auth'
 const express = require('express')
-const router = express.Router()
-router.get('/deals/:id', AdminAuth.auth, DealsController.query)
-router.post('/deals', AdminAuth.auth, DealsController.create)
-router.patch('/deals/:id', AdminAuth.auth, DealsController.update)
-router.delete('/deals/:id', AdminAuth.auth, DealsController.delete)
-export default router
+const DealsRouter = express.Router()
+DealsRouter.get('/deals/:id', AdminAuth.auth, DealsController.query)
+DealsRouter.post('/deals', AdminAuth.auth, DealsController.create)
+DealsRouter.patch('/deals/:id', AdminAuth.auth, DealsController.update)
+DealsRouter.delete('/deals/:id', AdminAuth.auth, DealsController.delete)
+export default DealsRouter
