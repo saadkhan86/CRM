@@ -8,24 +8,19 @@ export declare namespace CustomerInterface {
 		contact: string
 	}
 	interface create {
-		id?: Types.ObjectId | string
 		contact: string
 		name: string
 		email: string
 		organization: string
 	}
 	interface update {
-		contact: string
-		name: string
-		email: string
-		organization: string
+		contact?: string
+		name?: string
+		email?: string
+		organization?: string
 	}
 	interface query {
-		id?: Types.ObjectId | any
-		page?: number
-		order?: number | any
-		search?: string
-		limit?: number
+		id?: Types.ObjectId | string
 	}
 }
 

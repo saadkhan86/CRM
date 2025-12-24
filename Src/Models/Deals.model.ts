@@ -1,24 +1,33 @@
-import Customer from './Customer'
 import mongoose from 'mongoose'
-import DealsInterface from '../Interfaces/DealsInterface'
+import DealsInterface from '../Interfaces/IDeal'
 const Schema = mongoose.Schema
 const DealsSchema = new Schema<DealsInterface.Doc>(
 	{
-		createdWith:{
-			type:mongoose.Types.ObjectId,
-			ref:"Customer",
-			required:true,	
+		createdWith: {
+			type: mongoose.Types.ObjectId,
+			ref: 'Customer',
+			required: true,
 		},
-		amount: { type: Number, required: true },
+		amount:{
+			price: {
+				type: Number,
+				required: true,
+			},
+			currency: {
+				type: String,
+				required: true,
+				default:"PKR"
+			},
+		},
 		stage: {
 			type: String,
 			enum: [
 				'qualified',
-				'contactmade',
+				'contactMade',
 				'organization',
-				'demoscheduled',
-				'proposalsent',
-				'negotiationstarted',
+				'demoScheduled',
+				'proposalSent',
+				'negotiationStarted',
 				'won',
 				'lost',
 			],

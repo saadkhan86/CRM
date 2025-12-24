@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import ErrorHandler from '../ErrorHandler/ErrorHandler'
-import Admin from '../Models/Admin'
+import Admin from '../Models/Admin.model'
 const jwt = require('jsonwebtoken')
 const env = require('dotenv')
 env.config()
@@ -15,7 +15,7 @@ const AdminAuth = {
 		}
 
 		if (!token) {
-			throw new ErrorHandler(401,'Access Denied. No token provided.')
+			throw new ErrorHandler(401, 'Access Denied. No token provided.')
 		}
 		const isValid = await jwt.verify(token, process.env.JWT_SECRET)
 		if (!isValid) {
