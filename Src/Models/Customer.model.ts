@@ -3,6 +3,10 @@ import CustomerInterface from '../Interfaces/ICustomer'
 const Schema = mongoose.Schema
 const CustomerSchema = new Schema<CustomerInterface.Doc>(
 	{
+		createdBy:{
+			type:String,
+			required:true
+		},
 		name: {
 			type: String,
 			required: true,

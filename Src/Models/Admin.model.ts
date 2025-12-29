@@ -12,6 +12,11 @@ const AdminSchema = new Schema<AdminInterface.Doc>(
 			required: true,
 			select: false,
 		},
+		role: {
+			type: String,
+			default: 'admin',
+			immutable: true,
+		},
 		email: {
 			type: String,
 			unique: true,

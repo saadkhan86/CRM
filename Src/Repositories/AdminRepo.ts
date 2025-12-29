@@ -19,7 +19,7 @@ class AdminRepo {
 		password = await bcrypt.hashSync(password, 5)
 		const db = await Admin.create({ name, email, password })
 		user = {
-			token: await signToken(db._id),
+			token: await signToken(db._id,db.role),
 			_id: db._id,
 			name: db.name,
 			email: db.email,
@@ -37,7 +37,7 @@ class AdminRepo {
 			throw new ErrorHandler(401, 'Either wrong email or password')
 		}
 		user = {
-			token: await signToken(db._id),
+			token: await signToken(db._id,db.role),
 			_id: db._id,
 			name: db.name,
 			email: db.email,
@@ -58,7 +58,7 @@ class AdminRepo {
 			throw new ErrorHandler(500, 'something went wrong while updating Admin')
 		}
 		const user = {
-			token: signToken(admin._id),
+			token: signToken(admin._id,admin.role),
 			_id: admin._id,
 			name: admin.name,
 			email: admin.email,

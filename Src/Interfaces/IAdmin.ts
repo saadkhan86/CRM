@@ -5,6 +5,7 @@ export declare namespace AdminInterface {
 		name: string
 		password: string
 		email: string;
+		role:String
 	}
 	interface create {
 		name: Doc['name']

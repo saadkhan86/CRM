@@ -7,17 +7,11 @@ import DealsRepo from '../Repositories/DealsRepo'
 const DealsController = {
 	create: async (req: Request, res: Response, next: Function) => {
 		try {
-			const { createdWith, name, organization, contact, email } =
-				req.body
+			const { createdWith, name, organization, contact, email } = req.body
 			let customer: undefined | CustomerInterface.Doc
-
+			const createdBy: string = req.user!.role
 			if (!createdWith) {
-				customer = await CustomerRepo.create({
-					contact: contact,
-					email: email,
-					organization: organization,
-					name: name,
-				})
+				customer = await CustomerRepo.create(createdBy, req.body)
 			} else {
 				const cusQuery = await CustomerRepo.query(createdWith)
 

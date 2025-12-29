@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { Types } from 'mongoose'
 import ErrorHandler from '../ErrorHandler/ErrorHandler'
 import CustomerRepo from '../Repositories/CustomerRepo'
 
@@ -6,10 +7,11 @@ const CustomerController = {
 	create: async (req: Request, res: Response, next: Function) => {
 		try {
 			let { name, email, organization, contact } = req.body
+			let createdBy:string = req.user!.role
 			if (!email || !name || !organization || !contact) {
 				throw new ErrorHandler(400, 'fill all required fields')
 			}
-			const newCustomer = await CustomerRepo.create(req.body)
+			const newCustomer = await CustomerRepo.create(createdBy, req.body)
 			res.status(200).json({ success: true, data: newCustomer })
 		} catch (error) {
 			return next(error, req, res)
@@ -17,10 +19,11 @@ const CustomerController = {
 	},
 	update: async (req: Request, res: Response, next: Function) => {
 		try {
+			const createdBy:string=req.user!.role;
 			if (!req.params.id) {
 				throw new ErrorHandler(400, 'customer id not provided')
 			}
-			const updateCustomer = await CustomerRepo.update(req.params.id, req.body)
+			const updateCustomer = await CustomerRepo.update(createdBy,req.params.id, req.body)
 			res.status(200).json({ success: true, data: updateCustomer })
 		} catch (error) {
 			return next(error, req, res)
@@ -28,9 +31,9 @@ const CustomerController = {
 	},
 	delete: async (req: Request, res: Response, next: Function) => {
 		try {
-			const deleteCustomer = await CustomerRepo.delete(req.params.id)
+			const deleteCustomer = await CustomerRepo.delete(req.user!.role,req.params.id)
 			if (!deleteCustomer) {
-				throw new ErrorHandler(200, 'Customer not found')
+				throw new ErrorHandler(404, 'Customer not found')
 			}
 			res
 				.status(200)
