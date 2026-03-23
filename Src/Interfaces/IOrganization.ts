@@ -1,0 +1,27 @@
+import { Types } from "mongoose"
+import { Document } from "mongoose"
+
+export declare namespace IOrganization {
+  interface Doc extends Document {
+    name: string
+    address: string
+    peopleCount: number
+  }
+  interface Create {
+    name: string
+    address: string
+  }
+  interface Update {
+    _id: Types.ObjectId | string
+    name?: string
+    address?: string
+  }
+  interface Query {
+    _id?: Types.ObjectId | string
+    name?: string
+    address?: string
+  }
+  interface Delete {
+    _id: Types.ObjectId | string
+  }
+}

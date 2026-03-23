@@ -1,31 +1,34 @@
-import { Request, Response } from 'express'
-import ErrorHandler from '../ErrorHandler/ErrorHandler'
-import Admin from '../Models/Admin'
-const jwt = require('jsonwebtoken')
-const env = require('dotenv')
-env.config()
-const AdminAuth = {
-	auth: async (req: Request, res: Response, next: Function) => {
-		let token: any
-		if (
-			req.headers.authorization &&
-			req.headers.authorization.startsWith('Bearer')
-		) {
-			token = req.headers.authorization.split(' ')[1]
-		}
+import { Request, Response } from "express"
+import admin from "../Services/FirebaseAdmin.Service"
+import UserModel from "../Models/User.Model"
 
-		if (!token) {
-			throw new ErrorHandler(401,'Access Denied. No token provided.')
-		}
-		const isValid = await jwt.verify(token, process.env.JWT_SECRET)
-		if (!isValid) {
-			throw new ErrorHandler(405, 'invalid or expired token')
-		}
-		const user = await Admin.findById(isValid.id)
-		if (!user) {
-			throw new ErrorHandler(404, 'Admin not found')
-		}
-		return next()
-	},
+const Authentication = {
+  user: async (req: Request, res: Response, next: Function) => {
+    try {
+      // if (req.headers && req.headers.authorization?.startsWith("Bearer ")) {
+      //   const token = req.headers.authorization.split(" ")[1]
+      //   if (!token) {
+      //     return res.status(401).json({ message: "Unauthorized" })
+      //   }
+      //   const decodedToken = await admin.auth().verifyIdToken(token)
+      //   if (!decodedToken) {
+      //     return res.status(401).json({ message: "Unauthorized" })
+      //   }
+      //   const { email, name, picture } = decodedToken
+      let isExist = await UserModel.findOne({ email: "sk8613013@gmail.com" })
+      if (!isExist) {
+        isExist = await UserModel.create({
+          email: "sk8613013@gmail.com",
+          name: "saad",
+          profile: "",
+        })
+      }
+      req.user = isExist
+      next()
+      // }
+    } catch (error) {
+      next(error)
+    }
+  },
 }
-export default AdminAuth
+export default Authentication

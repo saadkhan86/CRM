@@ -1,7 +1,10 @@
-import express from 'express'
-import AdminRouter from './AdminRouter'
-import DealsRouter from './DealsRouter'
-const router = express.Router()
-router.use('/api/v1/admin', AdminRouter)
-router.use('/api/v1/admin', DealsRouter)
-export default router
+import express from "express"
+import PeopleRouter from "./PeopleRouter"
+import UserRouter from "./UserRouter"
+import OrganizationRouter from "./OrganizationRouter"
+const Router = express.Router()
+
+Router.use("/user", UserRouter)
+Router.use("/people", PeopleRouter)
+Router.use("/organization", OrganizationRouter)
+export default Router
