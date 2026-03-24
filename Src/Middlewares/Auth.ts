@@ -1,9 +1,14 @@
-import { Request, Response } from "express"
+import { Request, Response, NextFunction } from "express"
 import admin from "../Services/FirebaseAdmin.Service"
 import UserModel from "../Models/User.Model"
+import { IUser } from "../Interfaces/IUser"
+
+interface AuthenticatedRequest extends Request {
+  user?: IUser.Doc
+}
 
 const Authentication = {
-  user: async (req: Request, res: Response, next: Function) => {
+  user: async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
       // if (req.headers && req.headers.authorization?.startsWith("Bearer ")) {
       //   const token = req.headers.authorization.split(" ")[1]

@@ -3,11 +3,11 @@ import { IOrganization } from "../Interfaces/IOrganization"
 import OrganizationModel from "../Models/Organization.Model"
 import ErrorHandler from "../ErrorHandler/ErrorHandler"
 class OrganizationRepo {
-  public async Create(data: IOrganization.Create) {
+  public async create(data: IOrganization.Create) {
     const organization = await OrganizationModel.create(data)
     return organization
   }
-  public async Query(data: IOrganization.Query) {
+  public async query(data: IOrganization.Query) {
     let _query: Record<string, any> = {}
     if (data.name) {
       _query.name = { $regex: data.name, $options: "i" }
@@ -22,7 +22,7 @@ class OrganizationRepo {
     const count = await OrganizationModel.countDocuments(_query)
     return { organization, count }
   }
-  public async Update(data: IOrganization.Update) {
+  public async update(data: IOrganization.Update) {
     const organization = await OrganizationModel.findById(data._id)
     if (!organization) {
       throw new ErrorHandler(404, "Organization not found")
@@ -36,14 +36,14 @@ class OrganizationRepo {
     await organization.save()
     return organization
   }
-  public async Delete(data: IOrganization.Delete) {
-    if (!data._id) {
+  public async delete(_id: Types.ObjectId | string) {
+    if (!_id) {
       throw new ErrorHandler(400, "Organization id is required")
     }
-    const organization = await OrganizationModel.findByIdAndDelete(data._id)
+    const organization = await OrganizationModel.findByIdAndDelete(_id)
     return organization
   }
-  public async AddPeople(organizationId: string | Types.ObjectId) {
+  public async addPeople(organizationId: string | Types.ObjectId) {
     if (!organizationId) {
       throw new ErrorHandler(400, "Organization id is required")
     }
@@ -55,7 +55,7 @@ class OrganizationRepo {
     await organization.save()
     return organization
   }
-  public async RemovePeople(organizationId: string | Types.ObjectId) {
+  public async removePeople(organizationId: string | Types.ObjectId) {
     if (!organizationId) {
       throw new ErrorHandler(400, "Organization id is required")
     }

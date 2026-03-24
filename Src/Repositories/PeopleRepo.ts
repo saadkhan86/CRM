@@ -5,14 +5,14 @@ import PeopleModel from "../Models/People.Model"
 import OrganizationRepo from "./OrganizationRepo"
 
 class PeopleRepo {
-  async Create(data: IPeople.Create) {
+  async create(data: IPeople.Create) {
     let organization: any
     if (data.organization._id) {
-      organization = await OrganizationRepo.Query({
+      organization = await OrganizationRepo.query({
         _id: data.organization._id,
       })
     } else {
-      organization = await OrganizationRepo.Create({
+      organization = await OrganizationRepo.create({
         name: data.organization.name!,
         address: "",
       })
@@ -34,13 +34,13 @@ class PeopleRepo {
       .then((people) => people.populate("organization", "_id name"))
       .then(async (people) => {
         if (people.organization) {
-          await OrganizationRepo.AddPeople(people.organization._id)
+          await OrganizationRepo.addPeople(people.organization._id)
         }
         return people
       })
   }
-  async Query(data: IPeople.Query) {
-    const { limit = 5, page = 1 } = data
+  async query(data: IPeople.Query) {
+    const { limit = 5, page  = 1 } = data
     const _query: Record<string, any> = {}
     if (data.name) _query.name = { $regex: data.name, $options: "i" }
     if (data.email) _query.email = { $elemMatch: { address: data.email } }
@@ -53,7 +53,7 @@ class PeopleRepo {
     const count = await PeopleModel.countDocuments(_query)
     return { people, count }
   }
-  async Update(id: string, data: IPeople.Update) {
+  async update(id: string, data: IPeople.Update) {
     const people = await PeopleModel.findById(id)
     if (!people) {
       throw new ErrorHandler(404, "People not found")
@@ -87,11 +87,11 @@ class PeopleRepo {
     }
     let organization: any
     if (data.organization._id) {
-      organization = await OrganizationRepo.Query({
+      organization = await OrganizationRepo.query({
         _id: data.organization._id,
       })
     } else {
-      organization = await OrganizationRepo.Create({
+      organization = await OrganizationRepo.create({
         name: data.organization.name!,
         address: "",
       })
@@ -102,12 +102,12 @@ class PeopleRepo {
       .then((people) => people.populate("organization", "_id name"))
       .then(async (people) => {
         if (people.organization) {
-          await OrganizationRepo.AddPeople(people.organization._id!)
+          await OrganizationRepo.addPeople(people.organization._id!)
         }
         return people
       })
   }
-  async DeleteOrganizationFromPeople(id: string) {
+  async deleteOrganizationFromPeople(id: string) {
     const people = await PeopleModel.findById(id)
     if (!people) {
       throw new ErrorHandler(404, "People not found")
@@ -115,22 +115,22 @@ class PeopleRepo {
     people.organization = null
     return await people.save().then(async (people) => {
       if (people.organization) {
-        await OrganizationRepo.RemovePeople(people.organization._id!)
+        await OrganizationRepo.removePeople(people.organization._id!)
       }
       return people
     })
   }
-  async Delete(id: string) {
+  async delete(id: string) {
     const people = await PeopleModel.findByIdAndDelete(id)
     if (!people) {
       throw new ErrorHandler(404, "People not found")
     }
     if (people.organization) {
-      await OrganizationRepo.RemovePeople(people.organization._id!)
+      await OrganizationRepo.removePeople(people.organization._id!)
     }
     return people
   }
-  async DeleteEmailFromPeople(id: string, emailId: string) {
+  async deleteEmailFromPeople(id: string, emailId: string) {
     const people = await PeopleModel.findById(id)
     if (!people) {
       throw new ErrorHandler(404, "People not found")
@@ -138,7 +138,7 @@ class PeopleRepo {
     ;(people.email as any).pull(emailId)
     return await people.save()
   }
-  async DeletePhoneFromPeople(id: string, phoneId: string) {
+  async deletePhoneFromPeople(id: string, phoneId: string) {
     const people = await PeopleModel.findById(id)
     if (!people) {
       throw new ErrorHandler(404, "People not found")

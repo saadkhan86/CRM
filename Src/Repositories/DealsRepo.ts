@@ -4,7 +4,7 @@ import DealsModel from "../Models/Deals.Model"
 import ErrorHandler from "../ErrorHandler/ErrorHandler"
 
 class DealsRepo {
-  public async Create(data: IDeal.Create) {
+  public async create(data: IDeal.Create) {
     const deal = await DealsModel.create({
       title: data.title,
       value: {
@@ -18,7 +18,7 @@ class DealsRepo {
     })
     return deal
   }
-  public async Update(dealId: Types.ObjectId | string, data: IDeal.Update) {
+  public async update(dealId: Types.ObjectId | string, data: IDeal.Update) {
     let deal: IDeal.Doc | null = await DealsModel.findById(dealId)
     if (!deal) throw new ErrorHandler(404, "Deal not found")
     if (data.title) deal.title = data.title
@@ -33,7 +33,7 @@ class DealsRepo {
     await deal.save()
     return deal
   }
-  public async Query(data: IDeal.Query) {
+  public async query(data: IDeal.Query) {
     let _query: Record<string, any> = {}
     if (data._id) _query._id = data._id
     if (data.owner) _query.owner = data.owner

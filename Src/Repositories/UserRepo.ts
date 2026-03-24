@@ -4,7 +4,7 @@ import UserModel from "../Models/User.Model"
 import ErrorHandler from "../ErrorHandler/ErrorHandler"
 
 class UserRepo {
-  public async Update(data: IUser.Update, userId: Types.ObjectId | string) {
+  public async update(userId: Types.ObjectId | string, data: IUser.Update) {
     let user = await UserModel.findById({ _id: userId })
     if (!user) {
       throw new ErrorHandler(404, "User not found")
@@ -16,7 +16,7 @@ class UserRepo {
     return user
   }
 
-  public async Query(userId: Types.ObjectId | string) {
+  public async query(userId: Types.ObjectId | string) {
     let user = await UserModel.findById({ _id: userId })
     if (!user) {
       throw new ErrorHandler(404, "User not found")

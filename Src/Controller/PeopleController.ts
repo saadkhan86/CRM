@@ -1,115 +1,84 @@
 import { Request, Response } from "express"
 import PeopleRepo from "../Repositories/PeopleRepo"
 const PeopleController = {
-  Create: async (req: Request, res: Response, next: Function) => {
-    try {
-      const { name, email, phone, organization } = req.body
-      const people = await PeopleRepo.Create({
-        name,
-        email,
-        phone,
-        organization,
-      })
-      res.status(201).json({
-        success: true,
-        message: "People Created Successfully",
-        data: people,
-      })
-    } catch (error) {
-      next(error)
-    }
+  create: async (req: Request, res: Response, next: Function) => {
+    const people = await PeopleRepo.create({
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      organization: req.body.organization,
+    })
+    res.status(201).json({
+      success: true,
+      message: "People Created Successfully",
+      data: people,
+    })
   },
-  Query: async (req: Request, res: Response, next: Function) => {
-    try {
-      const people = await PeopleRepo.Query(req.query)
-      res.status(200).json({
-        success: true,
-        message: "People Fetched Successfully",
-        data: people,
-      })
-    } catch (error) {
-      next(error)
-    }
+  query: async (req: Request, res: Response, next: Function) => {
+    const people = await PeopleRepo.query(req.query)
+    res.status(200).json({
+      success: true,
+      message: "People Fetched Successfully",
+      data: people,
+    })
   },
-  Update: async (req: Request, res: Response, next: Function) => {
-    try {
-      const people = await PeopleRepo.Update(req.params.id, req.body)
-      res.status(200).json({
-        success: true,
-        message: "People Updated Successfully",
-        data: people,
-      })
-    } catch (error) {
-      next(error)
-    }
+  update: async (req: Request, res: Response, next: Function) => {
+    const people = await PeopleRepo.update(req.params.id, req.body)
+    res.status(200).json({
+      success: true,
+      message: "People Updated Successfully",
+      data: people,
+    })
   },
-  DeleteOrganizationFromPeople: async (
+  deleteOrganizationFromPeople: async (
     req: Request,
     res: Response,
     next: Function,
   ) => {
-    try {
-      const people = await PeopleRepo.DeleteOrganizationFromPeople(
-        req.params.id,
-      )
-      res.status(200).json({
-        success: true,
-        message: "Organization Deleted Successfully",
-        data: people,
-      })
-    } catch (error) {
-      next(error)
-    }
+    const people = await PeopleRepo.deleteOrganizationFromPeople(req.params.id)
+    res.status(200).json({
+      success: true,
+      message: "Organization Deleted Successfully",
+      data: people,
+    })
   },
-  Delete: async (req: Request, res: Response, next: Function) => {
-    try {
-      const people = await PeopleRepo.Delete(req.params.id)
-      res.status(200).json({
-        success: true,
-        message: "People Deleted Successfully",
-        data: people,
-      })
-    } catch (error) {
-      next(error)
-    }
+  delete: async (req: Request, res: Response, next: Function) => {
+    const people = await PeopleRepo.delete(req.params.id)
+    res.status(200).json({
+      success: true,
+      message: "People Deleted Successfully",
+      data: people,
+    })
   },
-  DeleteEmailFromPeople: async (
+  deleteEmailFromPeople: async (
     req: Request,
     res: Response,
     next: Function,
   ) => {
-    try {
-      const people = await PeopleRepo.DeleteEmailFromPeople(
-        req.params.id,
-        req.params.emailId,
-      )
-      res.status(200).json({
-        success: true,
-        message: "Email Deleted Successfully",
-        data: people,
-      })
-    } catch (error) {
-      next(error)
-    }
+    const people = await PeopleRepo.deleteEmailFromPeople(
+      req.params.id,
+      req.params.emailId,
+    )
+    res.status(200).json({
+      success: true,
+      message: "Email Deleted Successfully",
+      data: people,
+    })
   },
-  DeletePhoneFromPeople: async (
+  deletePhoneFromPeople: async (
     req: Request,
     res: Response,
     next: Function,
   ) => {
-    try {
-      const people = await PeopleRepo.DeletePhoneFromPeople(
-        req.params.id,
-        req.params.phoneId,
-      )
-      res.status(200).json({
-        success: true,
-        message: "Phone Deleted Successfully",
-        data: people,
-      })
-    } catch (error) {
-      next(error)
-    }
+    const people = await PeopleRepo.deletePhoneFromPeople(
+      req.params.id,
+      req.params.phoneId,
+    )
+    res.status(200).json({
+      success: true,
+      message: "Phone Deleted Successfully",
+      data: people,
+    })
   },
 }
 export default PeopleController

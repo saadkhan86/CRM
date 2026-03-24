@@ -1,13 +1,14 @@
 import express from "express"
 import OrganizationController from "../Controller/OrganizationController"
+import Authentication from "../Middlewares/Auth"
 const OrganizationRouter = express.Router()
+OrganizationRouter.use(Authentication.user)
+OrganizationRouter.post("/", OrganizationController.create)
 
-OrganizationRouter.post("/", OrganizationController.Create)
+OrganizationRouter.get("/query", OrganizationController.query)
 
-OrganizationRouter.get("/query", OrganizationController.Query)
+OrganizationRouter.patch("/:id", OrganizationController.update)
 
-OrganizationRouter.patch("/:id", OrganizationController.Update)
-
-OrganizationRouter.delete("/:id", OrganizationController.Delete)
+OrganizationRouter.delete("/:id", OrganizationController.delete)
 
 export default OrganizationRouter

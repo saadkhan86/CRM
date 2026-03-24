@@ -2,8 +2,8 @@ import { Request, Response } from "express"
 import OrganizationRepo from "../Repositories/OrganizationRepo"
 
 const OrganizationController = {
-  Create: async (req: Request, res: Response, next: Function) => {
-    const organization = await OrganizationRepo.Create({
+  create: async (req: Request, res: Response, next: Function) => {
+    const organization = await OrganizationRepo.create({
       name: req.body.name,
       address: req.body.address,
     })
@@ -13,16 +13,16 @@ const OrganizationController = {
       data: organization,
     })
   },
-  Query: async (req: Request, res: Response, next: Function) => {
-    const organization = await OrganizationRepo.Query(req.query)
+  query: async (req: Request, res: Response, next: Function) => {
+    const organization = await OrganizationRepo.query(req.query)
     res.status(200).json({
       success: true,
       message: "organization get successfully",
       data: organization,
     })
   },
-  Update: async (req: Request, res: Response, next: Function) => {
-    const organization = await OrganizationRepo.Update({
+  update: async (req: Request, res: Response, next: Function) => {
+    const organization = await OrganizationRepo.update({
       _id: req.params.id,
       name: req.body.name,
       address: req.body.address,
@@ -33,10 +33,8 @@ const OrganizationController = {
       data: organization,
     })
   },
-  Delete: async (req: Request, res: Response, next: Function) => {
-    const organization = await OrganizationRepo.Delete({
-      _id: req.params.id,
-    })
+  delete: async (req: Request, res: Response, next: Function) => {
+    const organization = await OrganizationRepo.delete(req.params.id)
     res.status(200).json({
       success: true,
       message: "organization delete successfully",

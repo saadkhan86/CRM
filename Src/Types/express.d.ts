@@ -1,6 +1,9 @@
-declare namespace Express {
-  interface Request {
-    user?: import("../Interfaces/IUser").IUser.Doc
-    // admin?: import("../Interfaces/IAdmin").IAdmin.Doc
+import { IUser } from "../Interfaces/IUser"
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: IUser.Doc
+    }
   }
 }

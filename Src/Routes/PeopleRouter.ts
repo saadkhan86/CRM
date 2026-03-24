@@ -1,20 +1,22 @@
 import express from "express"
 import PeopleController from "../Controller/PeopleController"
+import Authentication from "../Middlewares/Auth"
 const PeopleRouter = express.Router()
-PeopleRouter.post("/", PeopleController.Create)
-PeopleRouter.get("/query", PeopleController.Query)
-PeopleRouter.patch("/:id", PeopleController.Update)
-PeopleRouter.delete("/:id", PeopleController.Delete)
+PeopleRouter.use(Authentication.user)
+PeopleRouter.post("/", PeopleController.create)
+PeopleRouter.get("/query", PeopleController.query)
+PeopleRouter.patch("/:id", PeopleController.update)
+PeopleRouter.delete("/:id", PeopleController.delete)
 PeopleRouter.patch(
   "/:id/remove-organization",
-  PeopleController.DeleteOrganizationFromPeople,
+  PeopleController.deleteOrganizationFromPeople,
 )
 PeopleRouter.patch(
   "/:id/remove-email/:emailId",
-  PeopleController.DeleteEmailFromPeople,
+  PeopleController.deleteEmailFromPeople,
 )
 PeopleRouter.patch(
   "/:id/remove-phone/:phoneId",
-  PeopleController.DeletePhoneFromPeople,
+  PeopleController.deletePhoneFromPeople,
 )
 export default PeopleRouter
