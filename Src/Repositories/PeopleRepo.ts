@@ -97,20 +97,6 @@ class PeopleRepo {
       })
     }
     people.organization = organization._id
-    // if (data.organization) {
-    //   let organizations: IOrganization.Doc[] = await OrganizationRepo.Query({
-    //     name: data.organization,
-    //   })
-    //   if (!organizations.length) {
-    //     organizations = [
-    //       await OrganizationRepo.Create({
-    //         name: data.organization,
-    //         address: "",
-    //       }),
-    //     ]
-    //   }
-    //   people.organization = organizations[0]._id
-    // }
     return await people
       .save()
       .then((people) => people.populate("organization", "_id name"))

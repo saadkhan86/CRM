@@ -10,7 +10,11 @@ const PeopleController = {
         phone,
         organization,
       })
-      res.status(201).json({ success: true, data: people })
+      res.status(201).json({
+        success: true,
+        message: "People Created Successfully",
+        data: people,
+      })
     } catch (error) {
       next(error)
     }
@@ -18,7 +22,11 @@ const PeopleController = {
   Query: async (req: Request, res: Response, next: Function) => {
     try {
       const people = await PeopleRepo.Query(req.query)
-      res.status(200).json({ success: true, data: people })
+      res.status(200).json({
+        success: true,
+        message: "People Fetched Successfully",
+        data: people,
+      })
     } catch (error) {
       next(error)
     }
@@ -26,7 +34,11 @@ const PeopleController = {
   Update: async (req: Request, res: Response, next: Function) => {
     try {
       const people = await PeopleRepo.Update(req.params.id, req.body)
-      res.status(200).json({ success: true, data: people })
+      res.status(200).json({
+        success: true,
+        message: "People Updated Successfully",
+        data: people,
+      })
     } catch (error) {
       next(error)
     }
@@ -40,7 +52,11 @@ const PeopleController = {
       const people = await PeopleRepo.DeleteOrganizationFromPeople(
         req.params.id,
       )
-      res.status(200).json({ success: true, data: people })
+      res.status(200).json({
+        success: true,
+        message: "Organization Deleted Successfully",
+        data: people,
+      })
     } catch (error) {
       next(error)
     }
@@ -48,7 +64,11 @@ const PeopleController = {
   Delete: async (req: Request, res: Response, next: Function) => {
     try {
       const people = await PeopleRepo.Delete(req.params.id)
-      res.status(200).json({ success: true, data: people })
+      res.status(200).json({
+        success: true,
+        message: "People Deleted Successfully",
+        data: people,
+      })
     } catch (error) {
       next(error)
     }
@@ -63,7 +83,11 @@ const PeopleController = {
         req.params.id,
         req.params.emailId,
       )
-      res.status(200).json({ success: true, data: people })
+      res.status(200).json({
+        success: true,
+        message: "Email Deleted Successfully",
+        data: people,
+      })
     } catch (error) {
       next(error)
     }
@@ -78,7 +102,11 @@ const PeopleController = {
         req.params.id,
         req.params.phoneId,
       )
-      res.status(200).json({ success: true, data: people })
+      res.status(200).json({
+        success: true,
+        message: "Phone Deleted Successfully",
+        data: people,
+      })
     } catch (error) {
       next(error)
     }

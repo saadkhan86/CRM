@@ -19,7 +19,8 @@ class OrganizationRepo {
       _query._id = new Types.ObjectId(data._id)
     }
     const organization = await OrganizationModel.find(_query)
-    return organization
+    const count = await OrganizationModel.countDocuments(_query)
+    return { organization, count }
   }
   public async Update(data: IOrganization.Update) {
     const organization = await OrganizationModel.findById(data._id)
