@@ -59,7 +59,7 @@ class PeopleRepo {
       throw new ErrorHandler(404, "People not found")
     }
     if (data.name) people.name = data.name
-    if (data.email.length) {
+    if (data.email?.length) {
       for (let i = 0; i < data.email.length; i++) {
         const isExist = people.email.some(
           (email) => email.address === data.email[i].address,
@@ -72,7 +72,7 @@ class PeopleRepo {
         }
       }
     }
-    if (data.phone.length) {
+    if (data.phone?.length) {
       for (let i = 0; i < data.phone.length; i++) {
         const isExist = people.phone.some(
           (phone) => phone.number === data.phone[i].number,
@@ -85,23 +85,41 @@ class PeopleRepo {
         }
       }
     }
-    if (data.organization) {
-      let organizations: IOrganization.Doc[] = await OrganizationRepo.Query({
-        name: data.organization,
+    let organization: any
+    if (data.organization._id) {
+      organization = await OrganizationRepo.Query({
+        _id: data.organization._id,
       })
-      if (!organizations.length) {
-        organizations = [
-          await OrganizationRepo.Create({
-            name: data.organization,
-            address: "",
-          }),
-        ]
-      }
-      people.organization = organizations[0]._id
+    } else {
+      organization = await OrganizationRepo.Create({
+        name: data.organization.name!,
+        address: "",
+      })
     }
+    people.organization = organization._id
+    // if (data.organization) {
+    //   let organizations: IOrganization.Doc[] = await OrganizationRepo.Query({
+    //     name: data.organization,
+    //   })
+    //   if (!organizations.length) {
+    //     organizations = [
+    //       await OrganizationRepo.Create({
+    //         name: data.organization,
+    //         address: "",
+    //       }),
+    //     ]
+    //   }
+    //   people.organization = organizations[0]._id
+    // }
     return await people
       .save()
       .then((people) => people.populate("organization", "_id name"))
+      .then(async (people) => {
+        if (people.organization) {
+          await OrganizationRepo.AddPeople(people.organization._id!)
+        }
+        return people
+      })
   }
   async DeleteOrganizationFromPeople(id: string) {
     const people = await PeopleModel.findById(id)

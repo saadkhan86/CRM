@@ -20,7 +20,10 @@ export declare namespace IPeople {
     name: string
     email: { address: string; label: string }[]
     phone: { number: string; label: string }[]
-    organization: string
+    organization: {
+      name?: string
+      _id?: Types.ObjectId | string
+    }
   }
   interface Query {
     name?: string

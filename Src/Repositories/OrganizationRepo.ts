@@ -8,7 +8,6 @@ class OrganizationRepo {
     return organization
   }
   public async Query(data: IOrganization.Query) {
-    console.log(data)
     let _query: Record<string, any> = {}
     if (data.name) {
       _query.name = { $regex: data.name, $options: "i" }
@@ -41,9 +40,6 @@ class OrganizationRepo {
       throw new ErrorHandler(400, "Organization id is required")
     }
     const organization = await OrganizationModel.findByIdAndDelete(data._id)
-    if (!organization) {
-      throw new ErrorHandler(404, "Organization not found")
-    }
     return organization
   }
   public async AddPeople(organizationId: string | Types.ObjectId) {
