@@ -26,10 +26,11 @@ export declare namespace IPeople {
     }
   }
   interface Query {
+    _id?: Types.ObjectId | string
     name?: string
     email?: string
     phone?: string
-    organization?: string
+    organization?: Types.ObjectId | string
     page?: number
     limit?: number
   }

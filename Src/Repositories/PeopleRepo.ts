@@ -11,11 +11,22 @@ class PeopleRepo {
       organization = await OrganizationRepo.query({
         _id: data.organization._id,
       })
-    } else {
-      organization = await OrganizationRepo.create({
-        name: data.organization.name!,
-        address: "",
+      if (!organization.organization.length) {
+        throw new ErrorHandler(404, "Organization not found")
+      }
+      organization = organization.organization[0]
+    } else if (data.organization.name) {
+      organization = await OrganizationRepo.query({
+        name: data.organization.name,
       })
+      if (!organization.organization.length) {
+        organization = await OrganizationRepo.create({
+          name: data.organization.name,
+          address: "",
+        })
+      } else {
+        organization = organization.organization[0]
+      }
     }
     const people = new PeopleModel({
       name: data.name,
@@ -40,13 +51,13 @@ class PeopleRepo {
       })
   }
   async query(data: IPeople.Query) {
-    const { limit = 5, page  = 1 } = data
+    const { limit = 5, page = 1 } = data
     const _query: Record<string, any> = {}
+    if (data._id) _query._id = data._id
     if (data.name) _query.name = { $regex: data.name, $options: "i" }
     if (data.email) _query.email = { $elemMatch: { address: data.email } }
     if (data.phone) _query.phone = { $elemMatch: { number: data.phone } }
-    if (data.organization)
-      _query.organization = { $regex: data.organization, $options: "i" }
+    if (data.organization) _query.organization = data.organization
     const people = await PeopleModel.find(_query)
       .skip((page - 1) * limit)
       .limit(limit)

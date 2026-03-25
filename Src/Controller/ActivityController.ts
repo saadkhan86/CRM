@@ -19,7 +19,11 @@ const ActivityController = {
     const activity = await ActivityRepo.update(req.params.id, data)
     res
       .status(200)
-      .json({ success: true, message: "Activity Updated Successfully" })
+      .json({
+        success: true,
+        message: "Activity Updated Successfully",
+        activity,
+      })
   },
   delete: async (req: Request, res: Response, next: Function) => {
     const activity = await ActivityRepo.delete(req.params.id)

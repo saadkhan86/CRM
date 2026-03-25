@@ -9,18 +9,18 @@ const PeopleSchema = new mongoose.Schema<IPeople.Doc>(
     },
     email: [
       {
-        address: String,
+        address: { type: String, unique: true },
         label: String,
       },
     ],
     phone: [
       {
-        number: String,
+        number: { type: String, unique: true },
         label: String,
       },
     ],
     organization: {
-      type: Types.ObjectId || null,
+      type: Types.ObjectId,
       ref: "Organization",
     },
   },

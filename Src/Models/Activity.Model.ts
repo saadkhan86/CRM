@@ -28,17 +28,14 @@ const ActivitySchema = new mongoose.Schema<IActivity.Doc>({
   person: {
     type: mongoose.Types.ObjectId,
     ref: "People",
-    required: [true, "People Required"],
   },
   deal: {
     type: mongoose.Types.ObjectId,
     ref: "Deal",
-    required: [true, "Deal Required"],
   },
   organization: {
     type: mongoose.Types.ObjectId,
     ref: "Organization",
-    required: [true, "Organization Required"],
   },
   owner: {
     type: mongoose.Types.ObjectId,

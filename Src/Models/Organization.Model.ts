@@ -5,6 +5,7 @@ const OrganizationSchema = new mongoose.Schema<IOrganization.Doc>(
     name: {
       type: String,
       required: [true, "Organization name is required"],
+      unique: true,
     },
     address: {
       type: String,

@@ -16,6 +16,7 @@ const PeopleController = {
   },
   query: async (req: Request, res: Response, next: Function) => {
     const people = await PeopleRepo.query(req.query)
+    console.log(people.people[0])
     res.status(200).json({
       success: true,
       message: "People Fetched Successfully",

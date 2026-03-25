@@ -3,21 +3,64 @@ import { IActivity } from "../Interfaces/IActivity"
 import ActivityModel from "../Models/Activity.Model"
 import ErrorHandler from "../ErrorHandler/ErrorHandler"
 import DealsModel from "../Models/Deals.Model"
+import DealsRepo from "./DealsRepo"
+import PeopleRepo from "./PeopleRepo"
+import OrganizationRepo from "./OrganizationRepo"
 
 class ActivityRepo {
   public async create(data: IActivity.Create) {
-    const activity = await ActivityModel.create({
+    let personId = data.person
+    let organizationId: Types.ObjectId | null | string | undefined =
+      data.organization
+
+    if (data.deal) {
+      const deal = await DealsRepo.query({ _id: data.deal })
+      if (!deal.deals.length) throw new ErrorHandler(404, "Deal Not Found")
+
+      personId = deal.deals[0].person
+      organizationId = deal.deals[0].organization
+    } else if (data.person) {
+      const person = await PeopleRepo.query({ _id: data.person })
+      if (person.people.length !== 1)
+        throw new ErrorHandler(404, "Person Not Found")
+
+      organizationId = person.people[0].organization
+    } else if (data.organization) {
+      const organization = await OrganizationRepo.query({
+        _id: data.organization,
+      })
+      if (!organization.organization.length)
+        throw new ErrorHandler(404, "Organization Not Found")
+
+      organizationId = organization.organization[0]._id
+    }
+
+    if (!data.deal && !data.person && !data.organization) {
+      throw new ErrorHandler(
+        409,
+        "Activity must belong to deal, person, or organization",
+      )
+    }
+
+    let activity = new ActivityModel({
       title: data.title,
       type: data.type,
       description: data.description,
       dueDate: data.dueDate || null,
       completedDate: data.completedDate || null,
       status: data.status || "pending",
-      person: data.person,
+      person: personId,
       deal: data.deal,
       owner: data.owner,
-      organization: data.organization,
+      organization: organizationId,
     })
+    activity = await activity.save()
+    return activity.populate([
+      { path: "person", select: "name" },
+      { path: "deal", select: "title" },
+      { path: "organization", select: "name" },
+      { path: "owner", select: "name" },
+    ])
   }
   public async update(
     activityId: Types.ObjectId | string,
@@ -36,7 +79,13 @@ class ActivityRepo {
     if (data.organization) activity.organization = data.organization
     if (data.deal) activity.deal = data.deal
     if (data.owner) activity.owner = data.owner
-    return await activity.save()
+    activity = await activity.save()
+    return activity.populate([
+      { path: "person", select: "name" },
+      { path: "deal", select: "title" },
+      { path: "organization", select: "name" },
+      { path: "owner", select: "name" },
+    ])
   }
   public async delete(_id: Types.ObjectId | string) {
     return await DealsModel.findByIdAndDelete(_id)
@@ -52,7 +101,12 @@ class ActivityRepo {
     if (data.organization) _query.organization = data.organization
     if (data.deal) _query.deal = data.deal
     if (data.owner) _query.owner = data.owner
-    const activity = await ActivityModel.find(_query)
+    const activity = await ActivityModel.find(_query).populate([
+      { path: "person", select: "name" },
+      { path: "deal", select: "title" },
+      { path: "organization", select: "name" },
+      { path: "owner", select: "name" },
+    ])
     const count = await ActivityModel.countDocuments(_query)
     return { activity, count }
   }

@@ -8,9 +8,9 @@ export declare namespace IActivity {
     dueDate: Date
     completedDate: Date
     status: "pending" | "completed"
-    person: Types.ObjectId
-    deal: Types.ObjectId
-    organization: Types.ObjectId | string
+    person: Types.ObjectId | string | null
+    deal: Types.ObjectId | string | null
+    organization: Types.ObjectId | string | null
     owner: Types.ObjectId | string
   }
   interface Create {
@@ -20,9 +20,9 @@ export declare namespace IActivity {
     dueDate: Date
     completedDate: Date
     status: "pending" | "completed"
-    person: Types.ObjectId
-    deal: Types.ObjectId
-    organization: Types.ObjectId | string
+    person?: Types.ObjectId | string
+    deal?: Types.ObjectId | string
+    organization?: Types.ObjectId | string
     owner: Types.ObjectId | string
   }
   interface Update {
@@ -32,8 +32,8 @@ export declare namespace IActivity {
     dueDate?: Date
     completedDate?: Date
     status?: "pending" | "completed"
-    person?: Types.ObjectId
-    deal?: Types.ObjectId
+    person?: Types.ObjectId | string
+    deal?: Types.ObjectId | string
     organization?: Types.ObjectId | string
     owner?: Types.ObjectId | string
   }
@@ -44,8 +44,8 @@ export declare namespace IActivity {
     dueDate?: Date
     completedDate?: Date
     status?: "pending" | "completed"
-    person?: Types.ObjectId
-    deal?: Types.ObjectId
+    person?: Types.ObjectId | string
+    deal?: Types.ObjectId | string
     organization?: Types.ObjectId | string
     owner?: Types.ObjectId | string
   }
