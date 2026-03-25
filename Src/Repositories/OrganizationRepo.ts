@@ -18,7 +18,15 @@ class OrganizationRepo {
     if (data._id) {
       _query._id = new Types.ObjectId(data._id)
     }
+
+    const page = Number(data.page) || 1
+    const limit = Number(data.limit) || 10
+    const skip = (page - 1) * limit
+
     const organization = await OrganizationModel.find(_query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
     const count = await OrganizationModel.countDocuments(_query)
     return { organization, count }
   }

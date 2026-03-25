@@ -101,12 +101,21 @@ class ActivityRepo {
     if (data.organization) _query.organization = data.organization
     if (data.deal) _query.deal = data.deal
     if (data.owner) _query.owner = data.owner
-    const activity = await ActivityModel.find(_query).populate([
-      { path: "person", select: "name" },
-      { path: "deal", select: "title" },
-      { path: "organization", select: "name" },
-      { path: "owner", select: "name" },
-    ])
+
+    const page = Number(data.page) || 1
+    const limit = Number(data.limit) || 10
+    const skip = (page - 1) * limit
+
+    const activity = await ActivityModel.find(_query)
+      .populate([
+        { path: "person", select: "name" },
+        { path: "deal", select: "title" },
+        { path: "organization", select: "name" },
+        { path: "owner", select: "name" },
+      ])
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
     const count = await ActivityModel.countDocuments(_query)
     return { activity, count }
   }

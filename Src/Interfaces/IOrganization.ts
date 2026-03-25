@@ -20,6 +20,8 @@ export declare namespace IOrganization {
     _id?: Types.ObjectId | string
     name?: string
     address?: string
+    page?: number
+    limit?: number
   }
   interface Delete {
     _id: Types.ObjectId | string

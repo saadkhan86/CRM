@@ -48,5 +48,7 @@ export declare namespace IActivity {
     deal?: Types.ObjectId | string
     organization?: Types.ObjectId | string
     owner?: Types.ObjectId | string
+    page?: number
+    limit?: number
   }
 }

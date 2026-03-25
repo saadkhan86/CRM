@@ -71,10 +71,18 @@ class DealsRepo {
     if (data.person) _query.person = new Types.ObjectId(data.person)
     if (data.stage) _query.stage = data.stage
     if (data.title) _query.title = data.title
+
+    const page = Number(data.page) || 1
+    const limit = Number(data.limit) || 10
+    const skip = (page - 1) * limit
+
     const deals = await DealsModel.find(_query)
       .populate({ path: "organization", select: "name" })
       .populate({ path: "owner", select: "name" })
       .populate({ path: "person", select: "name" })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
     const count = await DealsModel.countDocuments(_query)
     return { deals, count }
   }

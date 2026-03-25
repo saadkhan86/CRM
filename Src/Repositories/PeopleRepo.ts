@@ -51,7 +51,8 @@ class PeopleRepo {
       })
   }
   async query(data: IPeople.Query) {
-    const { limit = 5, page = 1 } = data
+    const page = Number(data.page) || 1
+    const limit = Number(data.limit) || 10
     const _query: Record<string, any> = {}
     if (data._id) _query._id = data._id
     if (data.name) _query.name = { $regex: data.name, $options: "i" }
@@ -59,6 +60,7 @@ class PeopleRepo {
     if (data.phone) _query.phone = { $elemMatch: { number: data.phone } }
     if (data.organization) _query.organization = data.organization
     const people = await PeopleModel.find(_query)
+      .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
     const count = await PeopleModel.countDocuments(_query)

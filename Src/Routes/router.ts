@@ -11,5 +11,5 @@ Router.use("/people", PeopleRouter)
 Router.use("/organization", OrganizationRouter)
 Router.use("/deals", DealsRouter)
 Router.use("/activity", ActivityRouter)
-Router.use("/note", NoteRouter)
+Router.use("/notes", NoteRouter)
 export default Router

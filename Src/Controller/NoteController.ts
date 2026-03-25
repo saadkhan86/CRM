@@ -4,7 +4,7 @@ import { INote } from "../Interfaces/INote"
 
 const NoteController = {
   create: async (req: Request, res: Response, next: Function) => {
-    let data: INote.Create = req.body
+    let data = req.body
     data.owner = req.user?._id
     const note = await NoteRepo.create(data)
     res
