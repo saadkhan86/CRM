@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose, { Types } from "mongoose"
 import ErrorHandler from "../ErrorHandler/ErrorHandler"
 import { IOrganization } from "../Interfaces/IOrganization"
 import { IPeople } from "../Interfaces/IPeople"
@@ -32,7 +32,7 @@ class PeopleRepo {
     } else {
       throw new ErrorHandler(400, "Organization ID or name is required")
     }
-    const people = new PeopleModel({
+    let people = new PeopleModel({
       name: data.name,
       email: data.email?.map((email) => ({
         address: email.address,
@@ -43,16 +43,13 @@ class PeopleRepo {
         label: phone.label,
       })),
       organization: organization._id,
+      owner: data.owner,
     })
-    return await people
-      .save()
-      .then((people) => people.populate("organization", "_id name"))
-      .then(async (people) => {
-        if (people.organization) {
-          await OrganizationRepo.addPeople(people.organization._id)
-        }
-        return people
-      })
+    people = await people.save()
+    return people.populate([
+      { path: "organization", select: "name" },
+      { path: "owner", select: "name" },
+    ])
   }
   async query(data: IPeople.Query) {
     const page = Number(data.page) || 1
@@ -69,11 +66,15 @@ class PeopleRepo {
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
+      .populate([
+        { path: "organization", select: "name" },
+        { path: "owner", select: "name" },
+      ])
     const count = await PeopleModel.countDocuments(_query)
     return { people, count }
   }
   async update(id: string, data: IPeople.Update) {
-    const people = await PeopleModel.findById(id)
+    let people = await PeopleModel.findById(id)
     if (!people) {
       throw new ErrorHandler(404, "People not found")
     }
@@ -129,16 +130,12 @@ class PeopleRepo {
     } else {
       throw new ErrorHandler(400, "Organization ID or name is required")
     }
-    people.organization = organization._id as any
-    return await people
-      .save()
-      .then((people) => people.populate("organization", "_id name"))
-      .then(async (people) => {
-        if (people.organization) {
-          await OrganizationRepo.addPeople(people.organization._id!)
-        }
-        return people
-      })
+    people.organization = organization._id as Types.ObjectId
+    people = await people.save()
+    return await people.populate([
+      { path: "organization", select: "name" },
+      { path: "owner", select: "name" },
+    ])
   }
   async deleteOrganizationFromPeople(id: string) {
     const people = await PeopleModel.findById(id)

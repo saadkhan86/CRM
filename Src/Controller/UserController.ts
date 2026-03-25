@@ -3,7 +3,7 @@ import UserRepo from "../Repositories/UserRepo"
 
 const UserController = {
   update: async (req: Request, res: Response, next: Function) => {
-    const profile = await UserRepo.update(req.user?._id, req.body)
+    const profile = await UserRepo.update(req.user!._id, req.body)
     res.status(200).json({
       success: true,
       message: "Profile updated successfully",

@@ -1,8 +1,6 @@
-
-
+import { Document } from "mongoose"
 export declare namespace IUser {
-  interface Doc {
-    _id?: any
+  interface Doc extends Document {
     email: string
     name: string
     profile: string

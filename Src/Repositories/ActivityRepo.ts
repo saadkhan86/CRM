@@ -9,7 +9,7 @@ import OrganizationRepo from "./OrganizationRepo"
 
 class ActivityRepo {
   public async create(data: IActivity.Create) {
-    let personId = data.person
+    let personId: Types.ObjectId | null | string | undefined = data.person
     let organizationId: Types.ObjectId | null | string | undefined =
       data.organization
 
@@ -17,14 +17,14 @@ class ActivityRepo {
       const deal = await DealsRepo.query({ _id: data.deal })
       if (!deal.deals.length) throw new ErrorHandler(404, "Deal Not Found")
 
-      personId = deal.deals[0].person
-      organizationId = deal.deals[0].organization
+      personId = deal.deals[0].person ?? null
+      organizationId = deal.deals[0].organization ?? null
     } else if (data.person) {
       const person = await PeopleRepo.query({ _id: data.person })
       if (person.people.length !== 1)
         throw new ErrorHandler(404, "Person Not Found")
 
-      organizationId = person.people[0].organization
+      organizationId = person.people[0].organization ?? null
     } else if (data.organization) {
       const organization = await OrganizationRepo.query({
         _id: data.organization,
@@ -93,7 +93,8 @@ class ActivityRepo {
     let _query: Record<string, any> = {}
     if (data.title) _query.title = data.title
     if (data.type) _query.type = data.type
-    if (data.description) _query.description = data.description
+    if (data.description)
+      _query.description = { $regex: data.description, $options: "i" }
     if (data.dueDate) _query.dueDate = data.dueDate
     if (data.status) _query.status = data.status
     if (data.person) _query.person = new Types.ObjectId(data.person)
@@ -107,15 +108,15 @@ class ActivityRepo {
     const skip = (page - 1) * limit
 
     const activity = await ActivityModel.find(_query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .populate([
         { path: "person", select: "name" },
         { path: "deal", select: "title" },
         { path: "organization", select: "name" },
         { path: "owner", select: "name" },
       ])
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
     const count = await ActivityModel.countDocuments(_query)
     return { activity, count }
   }

@@ -26,27 +26,35 @@ class OrganizationRepo {
     const skip = (page - 1) * limit
 
     const organization = await OrganizationModel.find(_query)
-      .populate({ path: "owner", select: "name" })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
+      .populate({ path: "owner", select: "name" })
     const count = await OrganizationModel.countDocuments(_query)
     return { organization, count }
   }
   public async update(data: IOrganization.Update) {
-    let organization = await OrganizationModel.findById(data._id)
+    let organization = await OrganizationModel.findOne({
+      _id: data._id,
+      owner: data.owner,
+    })
     if (!organization) throw new ErrorHandler(404, "Organization not found")
     if (data.owner) organization.owner = data.owner
     if (data.address) organization.address = data.address
-
     if (data.name) organization.name = data.name
-
     organization = await organization.save()
     return await organization.populate({ path: "owner", select: "name" })
   }
-  public async delete(_id: Types.ObjectId | string) {
+  public async delete(
+    _id: Types.ObjectId | string,
+    owner: Types.ObjectId | string,
+  ) {
     if (!_id) throw new ErrorHandler(400, "Organization id is required")
-    const organization = await OrganizationModel.findByIdAndDelete(_id)
+    const organization = await OrganizationModel.findOneAndDelete({
+      _id,
+      owner,
+    })
+    if (!organization) throw new ErrorHandler(409, "Organization Not Found")
     return organization
   }
   public async addPeople(organizationId: string | Types.ObjectId) {

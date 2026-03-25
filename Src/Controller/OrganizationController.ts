@@ -6,7 +6,7 @@ const OrganizationController = {
     const organization = await OrganizationRepo.create({
       name: req.body.name,
       address: req.body.address,
-      owner: req.user?._id,
+      owner: req.user!._id,
     })
     res.status(200).json({
       success: true,
@@ -27,7 +27,7 @@ const OrganizationController = {
       _id: req.params.id,
       name: req.body.name,
       address: req.body.address,
-      owner: req.user?._id,
+      owner: req.user!._id,
     })
     res.status(200).json({
       success: true,
@@ -36,7 +36,10 @@ const OrganizationController = {
     })
   },
   delete: async (req: Request, res: Response, next: Function) => {
-    const organization = await OrganizationRepo.delete(req.params.id)
+    const organization = await OrganizationRepo.delete(
+      req.params.id,
+      req.user!._id,
+    )
     res.status(200).json({
       success: true,
       message: "organization delete successfully",

@@ -78,15 +78,15 @@ class NoteRepo {
     const limit = Number(data.limit) || 10
     const skip = (page - 1) * limit
     const notes = await NoteModel.find(_query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .populate([
         { path: "person", select: "name" },
         { path: "organization", select: "name" },
         { path: "deal", select: "title" },
         { path: "owner", select: "name" },
       ])
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
     const count = await NoteModel.countDocuments(_query)
     return { notes, count }
   }

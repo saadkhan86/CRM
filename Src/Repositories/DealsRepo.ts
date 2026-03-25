@@ -52,7 +52,7 @@ class DealsRepo {
     if (data.title) deal.title = data.title
     if (data.value) {
       deal.value.amount = data.value.amount
-      deal.value.currency = data.value.currency
+      deal.value.currency = data.value.currency || "USD"
     }
     if (data.stage) deal.stage = data.stage
     if (data.person) deal.person = data.person
@@ -80,12 +80,12 @@ class DealsRepo {
     const skip = (page - 1) * limit
 
     const deals = await DealsModel.find(_query)
-      .populate({ path: "organization", select: "name" })
-      .populate({ path: "owner", select: "name" })
-      .populate({ path: "person", select: "name" })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
+      .populate({ path: "organization", select: "name" })
+      .populate({ path: "owner", select: "name" })
+      .populate({ path: "person", select: "name" })
     const count = await DealsModel.countDocuments(_query)
     return { deals, count }
   }

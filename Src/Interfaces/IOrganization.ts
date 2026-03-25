@@ -17,7 +17,7 @@ export declare namespace IOrganization {
     _id: Types.ObjectId | string
     name?: string
     address?: string
-    owner?: Types.ObjectId | string
+    owner: Types.ObjectId | string
   }
   interface Query {
     _id?: Types.ObjectId | string

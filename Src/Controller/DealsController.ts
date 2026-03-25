@@ -5,7 +5,7 @@ import { IDeal } from "../Interfaces/IDeal"
 const DealsController = {
   create: async (req: Request, res: Response, next: Function) => {
     let data: IDeal.Create = req.body
-    data.owner = req.user?._id
+    data.owner = req.user!._id
     const deal = await DealsRepo.create(data)
     res
       .status(200)
