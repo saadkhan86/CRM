@@ -39,7 +39,7 @@ class DealsRepo {
       organization: organizationId,
       owner: data.owner,
     })
-    await deal.save()
+    deal = await deal.save()
     return await deal.populate([
       { path: "person", select: "name" },
       { path: "organization", select: "name" },
@@ -58,13 +58,16 @@ class DealsRepo {
     if (data.person) deal.person = data.person
     if (data.organization) deal.organization = data.organization
     if (data.owner) deal.owner = data.owner
-    await deal.save()
-    return deal
+    deal = await deal.save()
+    return await deal.populate([
+      { path: "person", select: "name" },
+      { path: "organization", select: "name" },
+      { path: "owner", select: "name" },
+    ])
   }
   public async query(data: IDeal.Query) {
     let _query: Record<string, any> = {}
-    console.log(data.owner)
-    if (data._id) _query._id = data._id
+    if (data._id) _query._id = new Types.ObjectId(data._id)
     if (data.owner) _query.owner = new Types.ObjectId(data.owner)
     if (data.organization)
       _query.organization = new Types.ObjectId(data.organization)

@@ -10,6 +10,11 @@ const OrganizationSchema = new mongoose.Schema<IOrganization.Doc>(
     address: {
       type: String,
     },
+    owner: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: [true, "Owner Of Organization Is Required"],
+    },
     peopleCount: {
       type: Number,
       default: 0,

@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import ErrorHandler from "../ErrorHandler/ErrorHandler"
 import { IOrganization } from "../Interfaces/IOrganization"
 import { IPeople } from "../Interfaces/IPeople"
@@ -6,27 +7,30 @@ import OrganizationRepo from "./OrganizationRepo"
 
 class PeopleRepo {
   async create(data: IPeople.Create) {
-    let organization: any
+    let organization: IOrganization.Doc
     if (data.organization._id) {
-      organization = await OrganizationRepo.query({
+      const result = await OrganizationRepo.query({
         _id: data.organization._id,
       })
-      if (!organization.organization.length) {
+      if (!result.organization.length) {
         throw new ErrorHandler(404, "Organization not found")
       }
-      organization = organization.organization[0]
+      organization = result.organization[0]
     } else if (data.organization.name) {
-      organization = await OrganizationRepo.query({
+      const result = await OrganizationRepo.query({
         name: data.organization.name,
       })
-      if (!organization.organization.length) {
+      if (!result.organization.length) {
         organization = await OrganizationRepo.create({
           name: data.organization.name,
           address: "",
+          owner: data.owner,
         })
       } else {
-        organization = organization.organization[0]
+        organization = result.organization[0]
       }
+    } else {
+      throw new ErrorHandler(400, "Organization ID or name is required")
     }
     const people = new PeopleModel({
       name: data.name,
@@ -54,11 +58,13 @@ class PeopleRepo {
     const page = Number(data.page) || 1
     const limit = Number(data.limit) || 10
     const _query: Record<string, any> = {}
-    if (data._id) _query._id = data._id
+    if (data._id) _query._id = new mongoose.Types.ObjectId(data._id)
     if (data.name) _query.name = { $regex: data.name, $options: "i" }
     if (data.email) _query.email = { $elemMatch: { address: data.email } }
     if (data.phone) _query.phone = { $elemMatch: { number: data.phone } }
-    if (data.organization) _query.organization = data.organization
+    if (data.organization)
+      _query.organization = new mongoose.Types.ObjectId(data.organization)
+    if (data.owner) _query.owner = new mongoose.Types.ObjectId(data.owner)
     const people = await PeopleModel.find(_query)
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
@@ -98,18 +104,32 @@ class PeopleRepo {
         }
       }
     }
-    let organization: any
+    let organization: IOrganization.Doc
     if (data.organization._id) {
-      organization = await OrganizationRepo.query({
+      const result = await OrganizationRepo.query({
         _id: data.organization._id,
       })
-    } else {
-      organization = await OrganizationRepo.create({
-        name: data.organization.name!,
-        address: "",
+      if (!result.organization.length) {
+        throw new ErrorHandler(404, "Organization not found")
+      }
+      organization = result.organization[0]
+    } else if (data.organization.name) {
+      const result = await OrganizationRepo.query({
+        name: data.organization.name,
       })
+      if (!result.organization.length) {
+        organization = await OrganizationRepo.create({
+          name: data.organization.name,
+          address: "",
+          owner: data.owner,
+        })
+      } else {
+        organization = result.organization[0]
+      }
+    } else {
+      throw new ErrorHandler(400, "Organization ID or name is required")
     }
-    people.organization = organization._id
+    people.organization = organization._id as any
     return await people
       .save()
       .then((people) => people.populate("organization", "_id name"))

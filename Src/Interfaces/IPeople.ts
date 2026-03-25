@@ -6,6 +6,7 @@ export declare namespace IPeople {
     email: { _id?: Types.ObjectId; address: string; label: string }[]
     phone: { _id?: Types.ObjectId; number: string; label: string }[]
     organization: Types.ObjectId | null
+    owner: Types.ObjectId | string
   }
   interface Create {
     name: string
@@ -15,6 +16,7 @@ export declare namespace IPeople {
       name?: string
       _id?: Types.ObjectId | string
     }
+    owner: Types.ObjectId | string
   }
   interface Update {
     name: string
@@ -24,6 +26,7 @@ export declare namespace IPeople {
       name?: string
       _id?: Types.ObjectId | string
     }
+    owner: Types.ObjectId | string
   }
   interface Query {
     _id?: Types.ObjectId | string
@@ -31,6 +34,7 @@ export declare namespace IPeople {
     email?: string
     phone?: string
     organization?: Types.ObjectId | string
+    owner?: Types.ObjectId | string
     page?: number
     limit?: number
   }

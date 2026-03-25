@@ -6,6 +6,7 @@ const OrganizationController = {
     const organization = await OrganizationRepo.create({
       name: req.body.name,
       address: req.body.address,
+      owner: req.user?._id,
     })
     res.status(200).json({
       success: true,
@@ -26,6 +27,7 @@ const OrganizationController = {
       _id: req.params.id,
       name: req.body.name,
       address: req.body.address,
+      owner: req.user?._id,
     })
     res.status(200).json({
       success: true,

@@ -7,6 +7,7 @@ const PeopleController = {
       email: req.body.email,
       phone: req.body.phone,
       organization: req.body.organization,
+      owner: req.user?._id,
     })
     res.status(201).json({
       success: true,
@@ -16,7 +17,6 @@ const PeopleController = {
   },
   query: async (req: Request, res: Response, next: Function) => {
     const people = await PeopleRepo.query(req.query)
-    console.log(people.people[0])
     res.status(200).json({
       success: true,
       message: "People Fetched Successfully",
@@ -24,7 +24,10 @@ const PeopleController = {
     })
   },
   update: async (req: Request, res: Response, next: Function) => {
-    const people = await PeopleRepo.update(req.params.id, req.body)
+    const people = await PeopleRepo.update(req.params.id, {
+      ...req.body,
+      owner: req.user?._id,
+    })
     res.status(200).json({
       success: true,
       message: "People Updated Successfully",

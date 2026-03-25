@@ -68,10 +68,11 @@ class NoteRepo {
   }
   public async query(data: INote.Query) {
     let _query: Record<string, any> = {}
-    if (data.deal) _query.deal = data.deal
-    if (data.organization) _query.organization = data.organization
-    if (data.owner) _query.owner = data.owner
-    if (data.person) _query.person = data.person
+    if (data.deal) _query.deal = new Types.ObjectId(data.deal)
+    if (data.organization)
+      _query.organization = new Types.ObjectId(data.organization)
+    if (data.owner) _query.owner = new Types.ObjectId(data.owner)
+    if (data.person) _query.person = new Types.ObjectId(data.person)
 
     const page = Number(data.page) || 1
     const limit = Number(data.limit) || 10

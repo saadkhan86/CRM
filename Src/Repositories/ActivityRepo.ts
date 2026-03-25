@@ -35,12 +35,11 @@ class ActivityRepo {
       organizationId = organization.organization[0]._id
     }
 
-    if (!data.deal && !data.person && !data.organization) {
+    if (!data.deal && !data.person && !data.organization)
       throw new ErrorHandler(
         409,
         "Activity must belong to deal, person, or organization",
       )
-    }
 
     let activity = new ActivityModel({
       title: data.title,
@@ -55,7 +54,7 @@ class ActivityRepo {
       organization: organizationId,
     })
     activity = await activity.save()
-    return activity.populate([
+    return await activity.populate([
       { path: "person", select: "name" },
       { path: "deal", select: "title" },
       { path: "organization", select: "name" },
@@ -80,7 +79,7 @@ class ActivityRepo {
     if (data.deal) activity.deal = data.deal
     if (data.owner) activity.owner = data.owner
     activity = await activity.save()
-    return activity.populate([
+    return await activity.populate([
       { path: "person", select: "name" },
       { path: "deal", select: "title" },
       { path: "organization", select: "name" },
@@ -88,7 +87,7 @@ class ActivityRepo {
     ])
   }
   public async delete(_id: Types.ObjectId | string) {
-    return await DealsModel.findByIdAndDelete(_id)
+    return await ActivityModel.findByIdAndDelete(_id)
   }
   public async query(data: IActivity.Query) {
     let _query: Record<string, any> = {}
@@ -97,10 +96,11 @@ class ActivityRepo {
     if (data.description) _query.description = data.description
     if (data.dueDate) _query.dueDate = data.dueDate
     if (data.status) _query.status = data.status
-    if (data.person) _query.person = data.person
-    if (data.organization) _query.organization = data.organization
-    if (data.deal) _query.deal = data.deal
-    if (data.owner) _query.owner = data.owner
+    if (data.person) _query.person = new Types.ObjectId(data.person)
+    if (data.organization)
+      _query.organization = new Types.ObjectId(data.organization)
+    if (data.deal) _query.deal = new Types.ObjectId(data.deal)
+    if (data.owner) _query.owner = new Types.ObjectId(data.owner)
 
     const page = Number(data.page) || 1
     const limit = Number(data.limit) || 10
