@@ -1,8 +1,8 @@
 import express from "express"
 import ActivityController from "../Controller/ActivityController"
-import Authentication from "../Middlewares/Auth"
+import Authentication from "../Middlewares/Authentication"
 const ActivityRouter = express.Router()
-ActivityRouter.use(Authentication.user)
+ActivityRouter.use(Authentication.authorization)
 ActivityRouter.post("/", ActivityController.create)
 ActivityRouter.patch("/:id", ActivityController.update)
 ActivityRouter.delete("/:id", ActivityController.delete)

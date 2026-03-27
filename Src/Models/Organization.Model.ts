@@ -10,6 +10,11 @@ const OrganizationSchema = new mongoose.Schema<IOrganization.Doc>(
     address: {
       type: String,
     },
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: [true, "Creator Of Organization Is Required"],
+    },
     owner: {
       type: mongoose.Types.ObjectId,
       ref: "User",

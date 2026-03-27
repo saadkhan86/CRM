@@ -1,8 +1,11 @@
 import { title } from "node:process"
 import DealsModel from "../Models/Deals.Model"
+import UserModel from "../Models/User.Model"
+import { pipeline } from "node:stream"
+import { Types } from "mongoose"
 
 class PipelineRepo {
-  public async get(data: any) {
+  public async getDeals(data: any) {
     const pipeline = await DealsModel.aggregate([
       {
         $lookup: {
@@ -62,6 +65,66 @@ class PipelineRepo {
         $sort: { _id: -1 },
       },
     ])
+    return pipeline
+  }
+  public async getUsers(user: any) {
+    let pipeline
+    if (user.role == "admin") {
+      pipeline = await UserModel.aggregate([
+        {
+          $match: {
+            role: "manager",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "_id",
+            foreignField: "manager",
+            as: "team",
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            email: 1,
+            role: 1,
+            team: {
+              $map: {
+                input: "$team",
+                as: "member",
+                in: {
+                  _id: "$$member._id",
+                  name: "$$member.name",
+                  email: "$$member.email",
+                  role: "$$member.role",
+                  status: "$$member.status",
+                },
+              },
+            },
+          },
+        },
+      ])
+    } else if (user.role == "manager") {
+      pipeline = await UserModel.aggregate([
+        {
+          $match: {
+            role: "sales",
+            manager: new Types.ObjectId(user._id),
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            email: 1,
+            role: 1,
+            status: 1,
+          },
+        },
+      ])
+    }
     return pipeline
   }
 }

@@ -8,9 +8,14 @@ class OrganizationRepo {
       name: data.name,
       address: data.address,
       owner: data.owner,
+      createdBy: data.createdBy,
     })
     organization = await organization.populate({
       path: "owner",
+      select: "name",
+    })
+    organization = await organization.populate({
+      path: "createdBy",
       select: "name",
     })
     return organization

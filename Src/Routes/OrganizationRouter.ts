@@ -1,11 +1,22 @@
 import express from "express"
 import OrganizationController from "../Controller/OrganizationController"
-import Authentication from "../Middlewares/Auth"
+import Authentication from "../Middlewares/Authentication"
+import Audit from "../Middlewares/Audit"
+import CreatorRoles from "../Middlewares/CreatorRoles"
 const OrganizationRouter = express.Router()
-OrganizationRouter.use(Authentication.user)
-OrganizationRouter.post("/", OrganizationController.create)
+OrganizationRouter.use(Authentication.authorization)
+OrganizationRouter.post(
+  "/",
+  Audit.creationAudit,
+  CreatorRoles.allow("admin", "manager", "sales"),
+  OrganizationController.create,
+)
 
-OrganizationRouter.get("/query", OrganizationController.query)
+OrganizationRouter.get(
+  "/query",
+  Authentication.authorization,
+  OrganizationController.query,
+)
 
 OrganizationRouter.patch("/:id", OrganizationController.update)
 

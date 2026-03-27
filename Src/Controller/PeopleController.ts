@@ -7,7 +7,7 @@ const PeopleController = {
       email: req.body.email,
       phone: req.body.phone,
       organization: req.body.organization,
-      owner: req.user!._id,
+      owner: req.body.createdBy,
     })
     res.status(201).json({
       success: true,

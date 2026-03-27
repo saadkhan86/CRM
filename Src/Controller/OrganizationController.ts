@@ -6,7 +6,8 @@ const OrganizationController = {
     const organization = await OrganizationRepo.create({
       name: req.body.name,
       address: req.body.address,
-      owner: req.user!._id,
+      createdBy: req.body.createdBy,
+      owner: req.body.owner,
     })
     res.status(200).json({
       success: true,

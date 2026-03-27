@@ -6,12 +6,14 @@ export declare namespace IOrganization {
     name: string
     address: string
     owner: Types.ObjectId | string
+    createdBy: Types.ObjectId | string
     peopleCount: number
   }
   interface Create {
     name: string
     address: string
     owner: Types.ObjectId | string
+    createdBy: Types.ObjectId | string
   }
   interface Update {
     _id: Types.ObjectId | string

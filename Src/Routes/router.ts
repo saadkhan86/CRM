@@ -1,4 +1,4 @@
-import express from "express"
+import express, { Request, Response } from "express"
 import PeopleRouter from "./PeopleRouter"
 import UserRouter from "./UserRouter"
 import OrganizationRouter from "./OrganizationRouter"
@@ -7,7 +7,8 @@ import ActivityRouter from "./ActivityRouter"
 import NoteRouter from "./NoteRouter"
 import PipelineRouter from "./PipelineRouter"
 const Router = express.Router()
-Router.use("/user", UserRouter)
+
+Router.use("/users", UserRouter)
 Router.use("/people", PeopleRouter)
 Router.use("/organization", OrganizationRouter)
 Router.use("/deals", DealsRouter)
