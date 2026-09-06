@@ -2,7 +2,6 @@ import { Types } from "mongoose"
 import { IUser } from "../Interfaces/IUser"
 import UserModel from "../Models/User.Model"
 import ErrorHandler from "../ErrorHandler/ErrorHandler"
-import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 class UserRepo {
   public async login(data: { email: string; password: string }) {
