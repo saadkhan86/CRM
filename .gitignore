@@ -1,3 +1,4 @@
 node_modules/
 .env
+Dist/
 Src/Services/Firebase.Service.json

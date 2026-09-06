@@ -66,7 +66,7 @@ The project follows a modular structure to keep the codebase organized:
 Create a .env file in the root directory and configure the following variables:
 
 PORT=8080
-MONGODB_URL=your_mongodb_connection_string
+MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_secure_random_string
 
 ### Running the Application
