@@ -4,13 +4,12 @@ import Router from "./Routes/router"
 import dotenv from "dotenv"
 import cors from "cors"
 import connetion from "./Connetions/MongoDB"
-import UserModel from "./Models/User.Model"
 dotenv.config()
 const app = express()
 
 app.use(express.json({ limit: "50mb" }))
 app.use(express.urlencoded({ extended: true }))
-app.use(cors({ origin: "*" }))
+app.use(cors({ origin: process.env.ALLOWED_ORIGINS || "*" }))
 app.use("/api/v1", Router)
 
 app.use(GlobalErrorHandler)

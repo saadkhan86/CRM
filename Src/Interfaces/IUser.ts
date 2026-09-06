@@ -4,13 +4,14 @@ export declare namespace IUser {
     email: string
     name: string
     fid: string
-    password: string
+    passwordHash: string
     profile: string
     role: "admin" | "manager" | "sales"
     createdBy: Types.ObjectId | string
     updatedBy: Types.ObjectId | string
     manager: Types.ObjectId | string | null
     status: "active" | "inactive"
+    comparePassword(password: string): Promise<boolean>
   }
   interface Create {
     email: string

@@ -12,17 +12,16 @@ class UserRepo {
     if (!user) {
       throw new ErrorHandler(404, "User Not Found")
     }
-    const comparePassword = await bcrypt.compare(data.password, user.password)
+    const comparePassword = await user.comparePassword(data.password)
     if (!comparePassword) throw new ErrorHandler(403, "Wrong Password")
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET!)
     return { user, token }
   }
   public async create(data: IUser.Create) {
-    data.password = await bcrypt.hash(data.password, 10)
     let user = await UserModel.create({
       name: data.name,
       email: data.email,
-      password: data.password,
+      passwordHash: data.password,
       profile: data.profile,
       role: data.role || "sales",
       createdBy: data.createdBy,

@@ -25,6 +25,7 @@ class PeopleRepo {
           name: data.organization.name,
           address: "",
           owner: data.owner,
+          createdBy: data.owner,
         })
       } else {
         organization = result.organization[0]
@@ -123,6 +124,7 @@ class PeopleRepo {
           name: data.organization.name,
           address: "",
           owner: data.owner,
+          createdBy: data.owner,
         })
       } else {
         organization = result.organization[0]
