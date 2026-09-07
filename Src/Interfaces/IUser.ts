@@ -11,6 +11,7 @@ export declare namespace IUser {
     updatedBy: Types.ObjectId | string
     manager: Types.ObjectId | string | null
     status: "active" | "inactive"
+    isEmailVerified:boolean
     comparePassword(password: string): Promise<boolean>
   }
   interface Create {

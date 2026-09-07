@@ -18,11 +18,14 @@ const UserSchema = new mongoose.Schema<IUser.Doc>(
     },
     passwordHash: {
       type: String,
-      select:false,
+      select:true,
       minLength: [6, "Password must be at least 6 characters long"],
     },
     profile: {
       type: String,
+    },isEmailVerified:{
+      type:Boolean,
+      default:false
     },
     role: {
       type: String,
@@ -45,7 +48,7 @@ const UserSchema = new mongoose.Schema<IUser.Doc>(
       type: String,
       enum: ["active", "inactive"],
       default: "active",
-    },
+    }
   },
   { timestamps: true },
 )

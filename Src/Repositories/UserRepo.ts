@@ -17,7 +17,7 @@ class UserRepo {
     return { user, token }
   }
   public async create(data: IUser.Create) {
-    let user = await UserModel.create({
+    return await UserModel.create({
       name: data.name,
       email: data.email,
       passwordHash: data.password,
@@ -27,7 +27,6 @@ class UserRepo {
       status: data.status || "active",
       manager: data.manager || null,
     })
-    return user
   }
   public async update(userId: Types.ObjectId | string, data: IUser.Update) {
     let user = await UserModel.findOne({
