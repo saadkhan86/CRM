@@ -20,6 +20,9 @@ app.get("/health", (req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
   })
 })
+app.get("/ping", (req: Request, res: Response) => {
+  res.status(200).json({ message: "pong" })
+})
 app.use("/api/v1", Router)
 
 app.use(GlobalErrorHandler)
