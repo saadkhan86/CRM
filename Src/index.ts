@@ -4,7 +4,6 @@ import Router from "./Routes/router"
 import dotenv from "dotenv"
 import cors from "cors"
 import connetion from "./Connetions/MongoDB"
-import { UAParser } from "ua-parser-js"
 dotenv.config()
 const app = express()
 
@@ -13,6 +12,13 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors({ origin: process.env.ALLOWED_ORIGINS || "*" }))
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ success: true, message: "Server is running properly" })
+})
+app.get("/health", (req: Request, res: Response) => {
+  res.status(200).json({
+    status: "ok",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  })
 })
 app.use("/api/v1", Router)
 
