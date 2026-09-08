@@ -3,7 +3,6 @@ import UserController from "../Controller/UserController"
 import Authentication from "../Middlewares/Authentication"
 import Role from "../Middlewares/Role"
 import Audit from "../Middlewares/Audit"
-import UAParser from "ua-parser-js"
 const UserRouter = express.Router()
 UserRouter.post("/login", UserController.login)
 UserRouter.post(

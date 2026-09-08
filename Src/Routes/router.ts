@@ -6,6 +6,7 @@ import DealsRouter from "./DealsRouter"
 import ActivityRouter from "./ActivityRouter"
 import NoteRouter from "./NoteRouter"
 import PipelineRouter from "./PipelineRouter"
+import SystemRouter from "./SystemRouter"
 const Router = express.Router()
 
 Router.use("/users", UserRouter)
@@ -15,4 +16,5 @@ Router.use("/deals", DealsRouter)
 Router.use("/activity", ActivityRouter)
 Router.use("/notes", NoteRouter)
 Router.use("/pipeline", PipelineRouter)
+Router.use("/system", SystemRouter)
 export default Router
