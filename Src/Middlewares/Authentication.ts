@@ -12,8 +12,8 @@ const Authentication = {
       let user
       const token = authHeader.split(" ")[1]
       try {
-        // const decodedByFirebase = await admin.auth().verifyIdToken(token)
-        // user = await UserModel.findOne({ fid: decodedByFirebase.uid })
+        const decodedByFirebase = await admin.auth().verifyIdToken(token)
+        user = await UserModel.findOne({ fid: decodedByFirebase.uid })
         user = await UserModel.findOne({ fid: token })
       } catch (error) {
         try {
